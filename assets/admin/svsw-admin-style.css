@@ -1,0 +1,145 @@
+.svsw-wrap .svsw-heading h1 {
+    font-size: 108%;
+}
+.svsw-wrap .heading-desc {
+    position: absolute;
+    right: 225px;
+    top: 20px;
+}
+.svsw-wrap .heading-desc p {
+    margin: 0;
+}
+.svsw-notice {
+    padding-top: 70px;
+    margin-right: 10px;
+}
+.svsw-sticky-top .svsw-heading {
+    -webkit-box-shadow: 0 8px 16px 0 rgba(20, 20, 20, 0.3);
+    box-shadow: 0 8px 16px 0 rgba(20, 20, 20, 0.3);
+}
+.svsw-heading {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    background: #fff;
+    margin-left: -20px;
+    padding: 12px 0 12px 40px;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+}
+.svsw-heading h1 {
+    font-size: 108%;
+}
+a.nav-tab {
+    cursor: pointer;
+}
+.wflproinfo {
+    background: #FF8C00;
+    color: white;
+    border-color: #FFA500;
+    width: 125px;
+    text-align: center;
+}
+.svsw-content-wrap{
+    width: 100%;
+    display: inline-block;
+}
+.svsw-main{
+    width: 73%;
+    margin-right: 2%;
+    float: left;
+}
+.svsw-side{
+    width: 25%;
+    display: inline-block;
+    margin-top: 43px;
+}
+.svsw-sidebar .sidebar_top {
+    background-image: url(../images/admin-banner.svg);
+    background-repeat: no-repeat;
+    background-position: bottom;
+    padding: 20px 20px 20px 20px;
+    background-color: #ffffff;
+    background-size: cover;
+}
+.svsw-sidebar .sidebar_top h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 26px;
+    font-weight: bold;
+    color: #ffffff;
+    padding-bottom: 5px;
+    line-height: 1.2;
+}
+.svsw-sidebar .sidebar_top .tagline_side {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13.5px;
+    color: #fff;
+    padding-bottom: 30px;
+}
+.svsw-sidebar .sidebar_top a {
+    width: auto;
+    color: #ffffff;
+    background: #FF8C00;
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 15px;
+}
+.svsw-sidebar .sidebar_bottom {
+    background: #ffffff;
+    padding: 20px 20px;
+}
+.svsw-sidebar .support {
+    background: #ffffff;
+    padding: 10px;
+    margin-top: 5px;
+}
+/* new */
+.svsw-input{
+    display: none;
+}
+img.svsw-admin-img {
+    width: 200px;
+}
+th#color {
+    width: 40px;
+}
+.svsw-value div {
+    width: 31px;
+    height: 31px;
+    border: 1px solid rgba(0,0,0,.2);
+}
+input.admin-tooltip {
+    margin: 15px 0;
+}
+.svsw-input-field.svsw-input-image img {
+    width: 150px;
+    border: 1px solid #000;
+    margin-right: 10px;
+}
+#edittag .form-field:has(.svsw-att-type) {
+    margin-bottom: 15px;
+}
+.form-field.svsw-input-field label, .form-field:has(.svsw-att-type) label {
+    display: block;
+    padding: 2px 0;
+}
+.svsw-sidebar .sidebar_bottom li {
+    background-color: #fff;
+    background-image: url(../images/check-v.png);
+    background-repeat: no-repeat;
+    background-position: top left;
+    padding-bottom: 18px;
+    padding-left: 22px;
+    background-position-y: 2px;
+}
+@media only screen and (max-width: 767px) {
+    .svsw-heading {
+        padding: 12px 0 12px 25px;
+    }
+}
