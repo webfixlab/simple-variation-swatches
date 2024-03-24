@@ -1,47 +1,45 @@
 <?php
+/**
+ * Plugin data struction
+ *
+ * @package    WordPress
+ * @subpackage Simple Variation Swatches
+ * @since      2.0
+ */
 
-// Plugin core data
 global $svsw__;
 
 $svsw__ = array(
-    'notice' => array(), // for keeping a copy of admin notices
+	'name'            => __( 'Simple Variation Swatches', 'simple-variation-swatches' ),
+	'version'         => '1.1.2',
+	'notice'          => array(),
+	'notice_interval' => 15, // in days.
 );
 
-$svsw__['plugin'] = array(
-    'name' => 'Simple Variation Swatches', // plugin name
-    'version'=> '1.1.1', // current plugin version
-    'notice_interval' => 15, // show info notice at this interval | in days
+// admin scopes to allow this plugin.
+$svsw__['admin_scopes'] = array(
+	'toplevel_page_svsw-settings', // simple variation swatches settings page.
+	'product_page_product_attributes',
+	'edit-tags',
+	'term',
 );
 
-// add external links
-$svsw__['plugin']['wporg_url'] = 'https://webfixlab.com/plugins/simple-variation-swatches-woocommerce/?wporg_url'; // Plugin URL | WordPress.org domain
-$svsw__['plugin']['review_url'] = 'https://wordpress.org/support/plugin/simple-variation-swatches/reviews/?rate=5#new-post'; // URL for posting plugin review | WordPress.org domain
-$svsw__['plugin']['request_quote'] = 'https://webfixlab.com/contact/'; // URL to ask for customization | WebFix Lab.com domain
-$svsw__['plugin']['documentation'] = 'https://docs.webfixlab.com/kb/simple-variation-swatches-for-woocommerce/'; // Plugin documentation URL | WebFix Lab.com domain
-
-$svsw__['plugin']['wc_url'] = 'https://webfixlab.com/plugins/simple-variation-swatches-woocommerce/?wc_url'; // WooCommerce plugin URL | WordPress.org domain
-
-// screens
-$svsw__['plugin']['screen'] = array(
-    'toplevel_page_svsw-settings', // simple variation swatches settings page
-    'product' // product related page here
+$svsw__['urls'] = array(
+	'plugin'  => 'https://webfixlab.com/plugins/simple-variation-swatches-woocommerce/',
+	'docs'    => 'https://docs.webfixlab.com/kb/simple-variation-swatches-for-woocommerce/',
+	'support' => 'https://webfixlab.com/contact/',
+	'review'  => 'https://wordpress.org/support/plugin/simple-variation-swatches/reviews/?rate=5#new-post',
+	'wc'      => 'https://wordpress.org/plugins/woocommerce/',
 );
 
-// for attribute screen only
-$svsw__['plugin']['screen_bases'] = array(
-    'product_page_product_attributes',
-    'edit-tags',
-    'term'
-);
-
-// product attribute types
+// product attribute types.
 $svsw__['attribute_types'] = array(
-    'select' => __( 'Select', 'woocommerce' ),
-    'color' => 'Color',
-    'image' => 'Image',
-    'button' => 'Button',
-    'radio' => 'Radio',
+	'select' => __( 'Select', 'simple-variation-swatches' ),
+	'color'  => __( 'Color', 'simple-variation-swatches' ),
+	'image'  => __( 'Image', 'simple-variation-swatches' ),
+	'button' => __( 'Button', 'simple-variation-swatches' ),
+	'radio'  => __( 'Radio', 'simple-variation-swatches' ),
 );
 
-// hook to modify global $svsw__ data variable
+// hook to modify global data variable.
 do_action( 'svsw_modify_core_data' );

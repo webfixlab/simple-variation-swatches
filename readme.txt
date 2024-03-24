@@ -2,11 +2,11 @@
 Contributors: smshahriar, aikya, webfixlab
 Tags: woocommerce variation, woocommerce variation swatches, woocommerce, variation swatches, woocommerce attributes, product attributes, product color, product size, variable product attributes, variation product swatches, color variation swatch, image variation swatch, printful color swatches
 Requires at least: 4.9
-Tested up to: 6.3.1
-Stable tag: 1.1.1
+Tested up to: 6.4.1
+Stable tag: 1.1.2
 Requires PHP: 7.0
 WC requires at least: 3.6
-WC tested up to: 8.0.3
+WC tested up to: 8.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ The best part? No complicated features or slow page speeds here! Get ready for a
 
 **FEATURES**
 
+* WooCommerce High-Performance Order Storage (HPOS) enabled
 * 5 types swatches: color, image, button, radio button and dropdown
 * Option to hide attribute labels
 * Option to set default swatch or variation type

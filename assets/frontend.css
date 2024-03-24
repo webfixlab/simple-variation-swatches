@@ -1,0 +1,186 @@
+.single-product div.product table.variations{
+    display: none;
+}
+.svsw-wrap {
+    margin-bottom: 40px;
+}
+.svsw-hide-attr .svsw-wrap {
+    margin-bottom: 25px;
+}
+.svsw-attr-wrap:has(.svsw-type-image), .svsw-attr-wrap:has(.svsw-type-color), .svsw-attr-wrap:has(.svsw-type-button) {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0 0 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+} 
+.svsw-swatch {
+    transition: .5s;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    color: #222;
+}
+.svsw-swatch {
+    border-color: rgba(0,0,0,0) !important;
+}
+.svsw-swatch.svsw-btn {
+    border-color: rgba(0,0,0,0.25) !important;
+}
+.svsw-swatch.svsw-selected {
+    border-color: #222 !important;
+}
+.svsw-swatch.svsw-btn.svsw-selected {
+    border-color: #222 !important;
+    background-color: #111111;
+    color: #fff;
+}
+.svsw-swatch:hover, .svsw-swatch *:hover {
+    cursor: pointer;
+}
+.svsw-swatch-content {
+    position: relative;
+}
+.svsw-swatch-content input[type=radio] {
+    height: 18px;
+    width: 18px;
+    accent-color: black;
+    transition: .5s;
+}
+.svsw-swatch-content input[type=radio]:focus {
+    outline: none;
+}
+.svsw-attr-wrap select {
+    border: 1px solid #000;
+    padding: 2px 0;
+    margin-bottom: 5px;
+}
+.svsw-attr-wrap select:focus {
+    outline: none;
+}
+.svsw-attr-wrap select.select-invalid {
+    border-color: rgba(0,0,0,.2);
+}
+.svsw-swatch-content.svsw-type-image, .svsw-swatch-content.svsw-type-color {
+    display: inline-flex;
+}
+.svsw-swatch-content .svsw-swatch.svsw_circle {
+    border-radius: 50%;
+}
+.svsw-swatch-content .svsw-swatch.svsw_round_corner {
+    border-radius: 5px;
+}
+.svsw-tooltip {
+    margin-bottom: 5px;
+    margin-left: -62px;
+    padding: 7px;
+    min-width: 100px;
+    border-radius: 3px;
+    background-color: #000000;
+    background-color: rgba(51, 51, 51, 0.9);
+    color: #ffffff;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.2;
+    pointer-events: none;
+    box-sizing: inherit;
+    position: absolute;
+    bottom: 109%;
+    left: 50%;
+    z-index: 999;
+    transform: translateZ(0);
+}
+.svsw-tooltip:after {
+    pointer-events: none;
+    box-sizing: inherit;
+    position: absolute;
+    bottom: -15%;
+    left: 50%;
+    z-index: 999;
+    transform: translateZ(0);
+    margin-left: -5px;
+    width: 0;
+    border-top: 5px solid #000000;
+    border-top: 5px solid rgba(51, 51, 51, 0.9);
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    content: " ";
+}
+.svsw-type-image .svsw-tooltip {
+    padding: 2px;
+    border-radius: 3px;
+    width: 105px;
+    height: 125px;
+}
+.svsw-type-image .svsw-tooltip:after {
+    bottom: -5%;
+}
+.svsw-type-image .svsw-tooltip img {
+    width: 100px;
+    height: 100px;
+    border-radius: 3px;
+    display: inline-block;
+    object-fit: cover;
+    padding-top: 3px;
+}
+.svsw-tooltip p {
+    margin: 0;
+}
+span.svsw-btn {
+    padding: 10px 20px;
+    display: inline-block;
+    line-height: 1.3;
+    text-align: center;
+}
+.svsw-color-image{
+    display: inline-block;
+}
+.svsw-swatch.svsw-swatch-radio {
+    border: none;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+a.svsw-reset.reset_variations {
+    margin: 0;
+}
+.svsw-btn.svsw_circle {
+    padding: 0px;
+    text-align: center;
+}
+.svsw-swatch label {
+    margin: 0;
+    padding-left: 5px;
+}
+.svsw-wrap hr {
+    margin: 5px 0px 10px 0;
+}
+label.attr-name.demo-block-1 {
+    display: block;
+    padding: 5px 15px;
+    background: #d1d1d1;
+    color: #000;
+}
+label.attr-name.demo-block-2 {
+    display: block;
+    padding: 5px 15px;
+    color: #ffffff;
+    background: #445f93;
+    display: block;
+}
+select.svsw-swatch-dropdown {
+    padding: 10px 20px;
+}
+.svsw-wrap.att-block-1{
+    background: #ffffff;
+    border-radius: 25px;
+    padding: 20px;
+    -webkit-box-shadow: 0 8px 16px 0 rgba(20, 20, 20, 0.3);
+    box-shadow: 0 8px 16px 0 rgba(20, 20, 20, 0.3);
+    max-width: 600px;
+}
+.att-block-1 label.attr-name.demo-block-1, .att-block-1 label.attr-name.demo-block-2{
+    padding: 5px 20px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}

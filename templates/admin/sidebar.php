@@ -1,4 +1,3 @@
-<?php global $svsw__; ?>
 <div class="svsw-sidebar">
     <div class="sidebar_top">
         <h1>Personalize Variation Swatches<br>$99 only*</h1>
