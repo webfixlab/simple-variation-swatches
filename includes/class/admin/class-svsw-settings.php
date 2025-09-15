@@ -7,14 +7,12 @@
  * @since      2.0
  */
 
-if ( ! class_exists( 'SVSWSettings' ) ) {
+if ( ! class_exists( 'SVSW_Settings' ) ) {
 
 	/**
 	 * Swatch admin settings functionlity class
 	 */
-	class SVSWSettings {
-
-
+	class SVSW_Settings {
 
 		/**
 		 * Settings data
@@ -37,13 +35,10 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 			add_action( 'admin_head', array( $this, 'save_settings' ) );
 		}
 
-
-
 		/**
 		 * Save admin settings
 		 */
 		public function save_settings() {
-
 			if ( ! isset( $_POST['svsw_nonce_field'] ) ) {
 				return;
 			}
@@ -126,7 +121,6 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 		 */
 		public function settings_header() {
 			global $svsw__;
-
 			?>
 			<div class="svsw-heading">
 				<?php $this->get_title(); ?>
@@ -146,9 +140,7 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 		 * Settings page content
 		 */
 		public function settings_content() {
-
 			$tab = $this->get_tab();
-
 			?>
 			<div class="row">
 				<nav class="nav-tab-wrapper woo-nav-tab-wrapper">
@@ -226,12 +218,11 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 							</th>
 							<td class="forminp forminp-text">
 								<?php
-								$checked = '';
+									$checked = '';
 
-								if ( isset( $this->data['att_name_underline'] ) && 'on' === $this->data['att_name_underline'] ) {
-									$checked = 'checked';
-								}
-
+									if ( isset( $this->data['att_name_underline'] ) && 'on' === $this->data['att_name_underline'] ) {
+										$checked = 'checked';
+									}
 								?>
 								<input name="att_name_underline" type="checkbox"<?php echo esc_attr( $checked ); ?>>
 								<label><?php echo esc_html__( 'Show', 'simple-variation-swatches' ); ?></label>
@@ -245,13 +236,13 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 								<?php
 									$design = '';
 
-								if ( isset( $this->data['att_name_design'] ) ) {
-									$design = $this->data['att_name_design'];
-								}
+									if ( isset( $this->data['att_name_design'] ) ) {
+										$design = $this->data['att_name_design'];
+									}
 
-								if ( empty( $design ) ) {
-									$design = 'demo-default';
-								}
+									if ( empty( $design ) ) {
+										$design = 'demo-default';
+									}
 
 									$designs = array(
 										'demo-default' => __( 'Default', 'simple-variation-swatches' ),
@@ -275,7 +266,7 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 											esc_html__( 'Attribute Name...', 'simple-variation-swatches' )
 										);
 									}
-									?>
+								?>
 							</td>
 						</tr>
 						<tr valign="top">
@@ -286,13 +277,13 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 								<?php
 									$design = '';
 
-								if ( isset( $this->data['att_block_design'] ) ) {
-									$design = $this->data['att_block_design'];
-								}
+									if ( isset( $this->data['att_block_design'] ) ) {
+										$design = $this->data['att_block_design'];
+									}
 
-								if ( empty( $design ) ) {
-									$design = 'demo-default';
-								}
+									if ( empty( $design ) ) {
+										$design = 'demo-default';
+									}
 
 									$designs = array(
 										'default' => __( 'Default', 'simple-variation-swatches' ),
@@ -315,7 +306,7 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 											esc_html__( 'Attribute section...', 'simple-variation-swatches' )
 										);
 									}
-									?>
+								?>
 							</td>
 						</tr>
 					</table>
@@ -406,28 +397,24 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 		 * Display auto convert attribute options dropdown
 		 */
 		public function att_to_swatch() {
-
 			$att_to_swatch = isset( $this->data['attr_to_swatches'] ) ? $this->data['attr_to_swatches'] : '';
 
 			$options = array(
 				'radio'  => __( 'Radio Button', 'simple-variation-swatches' ),
 				'button' => __( 'Button', 'simple-variation-swatches' ),
 			);
-
 			?>
 			<select name="attr_to_swatches">
 				<option value=""><?php echo esc_html__( 'Choose type', 'simple-variation-swatches' ); ?></option>
 				<?php
-
-				foreach ( $options as $val => $label ) {
-					printf(
-						'<option value="%s" %s>%s</option>',
-						esc_attr( $val ),
-						$att_to_swatch === $val ? esc_attr( 'selected' ) : '',
-						esc_html( $label )
-					);
-				}
-
+					foreach ( $options as $val => $label ) {
+						printf(
+							'<option value="%s" %s>%s</option>',
+							esc_attr( $val ),
+							$att_to_swatch === $val ? esc_attr( 'selected' ) : '',
+							esc_html( $label )
+						);
+					}
 				?>
 			</select>
 			<?php
@@ -438,11 +425,9 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 		 */
 		public function hide_att_name() {
 			$checked = '';
-
 			if ( isset( $this->data['hide_attr_name'] ) && 'on' === $this->data['hide_attr_name'] ) {
 				$checked = 'checked';
 			}
-
 			?>
 			<input name="hide_attr_name" type="checkbox"<?php echo esc_attr( $checked ); ?>>
 			<label><?php echo esc_html__( 'Hide', 'simple-variation-swatches' ); ?></label>
@@ -456,7 +441,6 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 		 */
 		public function swatch_design( $type ) {
 			$key = $type . '_swatch_style';
-
 			$design = isset( $this->data[ $key ] ) ? $this->data[ $key ] : '';
 
 			$options = array(
@@ -464,20 +448,18 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 				'svsw_circle'       => __( 'Circle', 'simple-variation-swatches' ),
 				'svsw_round_corner' => __( 'Round Corner', 'simple-variation-swatches' ),
 			);
-
 			?>
 			<select name="<?php echo esc_attr( $key ); ?>">
 				<option value=""><?php echo esc_html( __( 'Choose shape', 'simple-variation-swatches' ) ); ?></option>
 				<?php
-
-				foreach ( $options as $val => $label ) {
-					printf(
-						'<option value="%s" %s>%s</option>',
-						esc_attr( $val ),
-						$design === $val ? esc_attr( 'selected' ) : '',
-						esc_html( $label )
-					);
-				}
+					foreach ( $options as $val => $label ) {
+						printf(
+							'<option value="%s" %s>%s</option>',
+							esc_attr( $val ),
+							$design === $val ? esc_attr( 'selected' ) : '',
+							esc_html( $label )
+						);
+					}
 				?>
 			</select>
 			<?php
@@ -491,7 +473,6 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 		public function swatch_size( $type ) {
 			$key  = 'svsw_size_' . $type;
 			$size = isset( $this->data[ $key ] ) ? $this->data[ $key ] : 30;
-
 			?>
 			<input name="<?php echo esc_attr( $key ); ?>" type="number" style="" value="<?php echo esc_attr( $size ); ?>" min="10" max="100"> <?php echo esc_html__( 'px', 'simple-variation-swatches' ); ?>
 			<?php
@@ -501,9 +482,7 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 		 * Display swatch button and radio buttion font size
 		 */
 		public function font_size() {
-
 			$font_size = isset( $this->data['svsw_font_size'] ) ? $this->data['svsw_font_size'] : 18;
-
 			?>
 			<input name="svsw_font_size" type="number" style="" value="<?php echo esc_attr( $font_size ); ?>" min="8" max="50"> <?php echo esc_html__( 'px', 'simple-variation-swatches' ); ?>
 			<?php
@@ -534,7 +513,6 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 			if ( ! isset( $_POST['svsw_tab'] ) ) {
 				return;
 			}
-
 			?>
 			<div id="message" class="updated notice notice-success">
 				<p>
@@ -547,5 +525,5 @@ if ( ! class_exists( 'SVSWSettings' ) ) {
 	}
 }
 
-$svsw_settings = new SVSWSettings();
+$svsw_settings = new SVSW_Settings();
 $svsw_settings->init();

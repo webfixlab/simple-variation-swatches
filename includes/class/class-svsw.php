@@ -14,8 +14,6 @@ if ( ! class_exists( 'SVSW' ) ) {
 	 */
 	class SVSW {
 
-
-
 		/**
 		 * Swatch settings data
 		 *
@@ -30,8 +28,6 @@ if ( ! class_exists( 'SVSW' ) ) {
 		 */
 		private $pack; // Pack data | PRO.
 
-
-
 		/**
 		 * Initialize class
 		 */
@@ -45,8 +41,6 @@ if ( ! class_exists( 'SVSW' ) ) {
 		public function init() {
 			add_action( 'woocommerce_variable_add_to_cart', array( $this, 'init_swatch' ), 29 );
 		}
-
-
 
 		/**
 		 * Initialize swatch functionlity
@@ -70,19 +64,15 @@ if ( ! class_exists( 'SVSW' ) ) {
 				$display_name = true;
 				$hide_attr    = '';
 			}
-
 			?>
 			<div class="svsw-frontend-wrap <?php echo esc_attr( $hide_attr ); ?>">
 				<?php
-
-				foreach ( $attributes as $attribute_name => $options ) {
-					$this->atts_to_swatch( $attribute_name, $options, $display_name );
-				}
-
+					foreach ( $attributes as $attribute_name => $options ) {
+						$this->atts_to_swatch( $attribute_name, $options, $display_name );
+					}
 				?>
 			</div>
 			<?php
-
 			do_action( 'svsw_after_atts', $attributes, $this->pack );
 		}
 
@@ -116,7 +106,6 @@ if ( ! class_exists( 'SVSW' ) ) {
 
 			// attribute block design.
 			$block_design = isset( $this->data['att_block_design'] ) ? 'att-' . $this->data['att_block_design'] : '';
-
 			?>
 			<div class="svsw-wrap <?php echo esc_attr( $block_design ); ?>">
 				<?php if ( $show_name ) : ?>
@@ -130,14 +119,12 @@ if ( ! class_exists( 'SVSW' ) ) {
 				<?php endif; ?>
 				<div class="svsw-attr-wrap" data-taxonomy="<?php echo esc_attr( sanitize_title( $attribute_name ) ); ?>">
 					<?php
-
-					// display swatches.
-					if ( is_wp_error( $terms ) ) {
-						$this->skipped_atts( $options, $attribute_name );
-					} else {
-						$this->display_swatches( $terms, $options, $att_name );
-					}
-
+						// display swatches.
+						if ( is_wp_error( $terms ) ) {
+							$this->skipped_atts( $options, $attribute_name );
+						} else {
+							$this->display_swatches( $terms, $options, $att_name );
+						}
 					?>
 				</div>
 			</div>
@@ -207,7 +194,7 @@ if ( ! class_exists( 'SVSW' ) ) {
 		/**
 		 * Display skipped options that didn't have any swatch data
 		 *
-		 * @param object $skipped_terms  attribute option WP Term objects that didn't have any swatch settings data.
+		 * @param array $skipped_terms  attribute option WP Term array that didn't have any swatch settings data.
 		 * @param string $attribute_name product attribute name.
 		 */
 		public function skipped_atts( $skipped_terms, $attribute_name ) {
@@ -239,7 +226,6 @@ if ( ! class_exists( 'SVSW' ) ) {
 			}
 
 			foreach ( $skipped_terms as $opt_name => $opt_value ) {
-
 				if ( is_numeric( $opt_name ) ) {
 					$opt_name = $opt_value;
 				}
@@ -268,94 +254,87 @@ if ( ! class_exists( 'SVSW' ) ) {
 		 * @param string $value saved swatch settings data.
 		 */
 		public function render_swatch( $slug, $type, $value ) {
-
 			$data = $this->data;
-
 			?>
 			<div class="svsw-swatch-content svsw-type-<?php echo esc_attr( $type ); ?>">
 			<?php
-
-			$image_shape = ' square';
-			if ( isset( $data['image_swatch_style'] ) && ! empty( $data['image_swatch_style'] ) ) {
-				$image_shape = ' ' . $data['image_swatch_style'];
-			}
-
-			$color_shape = ' square';
-			if ( isset( $data['color_swatch_style'] ) && ! empty( $data['color_swatch_style'] ) ) {
-				$color_shape = ' ' . $data['color_swatch_style'];
-			}
-
-			$image_size = 31;
-			if ( isset( $data['svsw_size_image'] ) && ! empty( $data['svsw_size_image'] ) ) {
-				$image_size = $data['svsw_size_image'];
-			}
-
-			$color_size = 31;
-			if ( isset( $data['svsw_size_color'] ) && ! empty( $data['svsw_size_color'] ) ) {
-				$color_size = $data['svsw_size_color'];
-			}
-
-			$tooltip = '';
-			if ( isset( $data['tooltip'] ) && ! empty( $data['tooltip'] ) ) {
-				$tooltip = $data['tooltip'];
-			}
-
-			$font_size = 18;
-			if ( isset( $data['svsw_font_size'] ) && ! empty( $data['svsw_font_size'] ) ) {
-				$font_size = $data['svsw_font_size'];
-			}
-
-			if ( 'color' === $type ) {
-				// dynamic border width for selected and un-selected swatch.
-				$border = (int) ( $color_size / 15 );
-
-				printf(
-					'<span class="svsw-swatch svsw-color-image %s" style="background-color: %s; width: %spx; height: %spx; border: %spx solid" data-term="%s" data-tooltip="%s" data-term="%s"></span>',
-					esc_attr( $color_shape ),
-					esc_html( $value ),
-					esc_attr( $color_size ),
-					esc_attr( $color_size ),
-					esc_attr( $border ),
-					esc_attr( $slug ),
-					esc_html( $tooltip ),
-					esc_attr( $slug )
-				);
-			} elseif ( 'image' === $type ) {
-				// dynamic border width for selected and un-selected swatch.
-				$border = (int) ( $image_size / 20 );
-
-				// without any image set, use default woocommerce placeholder image.
-				if ( ! isset( $value ) || empty( $value ) ) {
-					$value = $this->wc_placeholder_imgs();
+				$image_shape = ' square';
+				if ( isset( $data['image_swatch_style'] ) && ! empty( $data['image_swatch_style'] ) ) {
+					$image_shape = ' ' . $data['image_swatch_style'];
 				}
 
-				printf(
-					'<span class="svsw-swatch svsw-color-image %s" style="background: url(%s) no-repeat; background-size: cover; width: %spx; height: %spx; border: %spx solid;" data-term="%s" data-tooltip="%s" data-img="%s"></span>',
-					esc_attr( $image_shape ),
-					esc_url( $value ),
-					esc_attr( $image_size ),
-					esc_attr( $image_size ),
-					esc_attr( $border ),
-					esc_attr( $slug ),
-					esc_html( $tooltip ),
-					esc_attr( $value )
-				);
-			} elseif ( 'button' === $type ) {
-				printf(
-					'<span class="svsw-swatch svsw-btn" style="font-size: %spx; border: 1px solid;" data-term="%s">%s</span>',
-					esc_attr( $font_size ),
-					esc_attr( $slug ),
-					esc_html( $value )
-				);
-			} elseif ( 'radio' === $type ) {
-				?>
-				<div class="svsw-swatch svsw-swatch-radio" data-term="<?php echo esc_attr( $slug ); ?>">
-					<input type="radio" name="svsw_radio_swatch" value="<?php echo esc_html( $value ); ?>">
-					<label style="font-size: <?php echo esc_attr( $font_size ); ?>px;"><?php echo esc_html( $value ); ?></label>
-				</div>
-				<?php
-			}
+				$color_shape = ' square';
+				if ( isset( $data['color_swatch_style'] ) && ! empty( $data['color_swatch_style'] ) ) {
+					$color_shape = ' ' . $data['color_swatch_style'];
+				}
 
+				$image_size = 31;
+				if ( isset( $data['svsw_size_image'] ) && ! empty( $data['svsw_size_image'] ) ) {
+					$image_size = $data['svsw_size_image'];
+				}
+
+				$color_size = 31;
+				if ( isset( $data['svsw_size_color'] ) && ! empty( $data['svsw_size_color'] ) ) {
+					$color_size = $data['svsw_size_color'];
+				}
+
+				$tooltip = '';
+				if ( isset( $data['tooltip'] ) && ! empty( $data['tooltip'] ) ) {
+					$tooltip = $data['tooltip'];
+				}
+
+				$font_size = 18;
+				if ( isset( $data['svsw_font_size'] ) && ! empty( $data['svsw_font_size'] ) ) {
+					$font_size = $data['svsw_font_size'];
+				}
+
+				if ( 'color' === $type ) {
+					// dynamic border width for selected and un-selected swatch.
+					$border = (int) ( $color_size / 15 );
+					printf(
+						'<span class="svsw-swatch svsw-color-image %s" style="background-color: %s; width: %spx; height: %spx; border: %spx solid" data-term="%s" data-tooltip="%s" data-term="%s"></span>',
+						esc_attr( $color_shape ),
+						esc_html( $value ),
+						esc_attr( $color_size ),
+						esc_attr( $color_size ),
+						esc_attr( $border ),
+						esc_attr( $slug ),
+						esc_html( $tooltip ),
+						esc_attr( $slug )
+					);
+				} elseif ( 'image' === $type ) {
+					// dynamic border width for selected and un-selected swatch.
+					$border = (int) ( $image_size / 20 );
+					// without any image set, use default woocommerce placeholder image.
+					if ( ! isset( $value ) || empty( $value ) ) {
+						$value = $this->wc_placeholder_imgs();
+					}
+					printf(
+						'<span class="svsw-swatch svsw-color-image %s" style="background: url(%s) no-repeat; background-size: cover; width: %spx; height: %spx; border: %spx solid;" data-term="%s" data-tooltip="%s" data-img="%s"></span>',
+						esc_attr( $image_shape ),
+						esc_url( $value ),
+						esc_attr( $image_size ),
+						esc_attr( $image_size ),
+						esc_attr( $border ),
+						esc_attr( $slug ),
+						esc_html( $tooltip ),
+						esc_attr( $value )
+					);
+				} elseif ( 'button' === $type ) {
+					printf(
+						'<span class="svsw-swatch svsw-btn" style="font-size: %spx; border: 1px solid;" data-term="%s">%s</span>',
+						esc_attr( $font_size ),
+						esc_attr( $slug ),
+						esc_html( $value )
+					);
+				} elseif ( 'radio' === $type ) {
+					?>
+					<div class="svsw-swatch svsw-swatch-radio" data-term="<?php echo esc_attr( $slug ); ?>">
+						<input type="radio" name="svsw_radio_swatch" value="<?php echo esc_html( $value ); ?>">
+						<label style="font-size: <?php echo esc_attr( $font_size ); ?>px;"><?php echo esc_html( $value ); ?></label>
+					</div>
+					<?php
+				}
 			?>
 			</div>
 			<?php
@@ -384,7 +363,6 @@ if ( ! class_exists( 'SVSW' ) ) {
 			$sizes = array( 100, 150, 300, 600 );
 			foreach ( $sizes as $size ) {
 				$newpath = $updir['basedir'] . '/woocommerce-placeholder-' . $size . 'x' . $size . '.png';
-
 				if ( in_array( $newpath, $files, true ) ) {
 					$wc_img = $updir['baseurl'] . '/woocommerce-placeholder-' . $size . 'x' . $size . '.png';
 					break;
@@ -393,7 +371,6 @@ if ( ! class_exists( 'SVSW' ) ) {
 
 			// keep a backup copy.
 			$svsw__['wc_placeholder_img'] = $wc_img;
-
 			return $wc_img;
 		}
 	}

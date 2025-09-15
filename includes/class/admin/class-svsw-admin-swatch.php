@@ -7,16 +7,12 @@
  * @since      2.0
  */
 
-if ( ! class_exists( 'SVSWAdminSwatch' ) ) {
-
-
+if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 
 	/**
 	 * Admin swatch class
 	 */
-	class SVSWAdminSwatch {
-
-
+	class SVSW_Admin_Swatch {
 
 		/**
 		 * Initialize admin swatch class
@@ -31,8 +27,6 @@ if ( ! class_exists( 'SVSWAdminSwatch' ) ) {
 			add_action( 'edit_term', array( $this, 'save_swatches' ), 10, 3 );
 		}
 
-
-
 		/**
 		 * Initialize admin swatch option
 		 */
@@ -45,7 +39,6 @@ if ( ! class_exists( 'SVSWAdminSwatch' ) ) {
 
 			// add custom hook to support our plugin stuff here.
 			foreach ( $atts as $tax ) {
-
 				// edit term input fields, display.
 				$name = wc_attribute_taxonomy_name( $tax->attribute_name );
 
@@ -54,13 +47,11 @@ if ( ! class_exists( 'SVSWAdminSwatch' ) ) {
 
 				// custom column - for color and image type attribute only.
 				if ( $this->if_add_term_column( $tax ) ) {
-
 					// add content to custom column created.
 					add_filter( 'manage_' . $name . '_custom_column', array( $this, 'term_list_column' ), 10, 3 );
 
 					// add new custom column to attribute list.
 					add_filter( 'manage_edit-' . $name . '_columns', array( $this, 'term_list_header' ), 20, 1 );
-
 				}
 			}
 		}
@@ -321,7 +312,6 @@ if ( ! class_exists( 'SVSWAdminSwatch' ) ) {
 		 * @param string $att_type swatch attribute type.
 		 */
 		public function dispay_att_types( $att_type = '' ) {
-
 			// get all types.
 			$types = apply_filters( 'product_attributes_type_selector', array() );
 
@@ -350,7 +340,6 @@ if ( ! class_exists( 'SVSWAdminSwatch' ) ) {
 		 * @param array  $values input field saved value.
 		 */
 		public function display_input( $type, $values = array() ) {
-
 			// get saved values - if any.
 			$button       = '';
 			$radio        = '';
@@ -384,7 +373,6 @@ if ( ! class_exists( 'SVSWAdminSwatch' ) ) {
 			if ( empty( $color ) ) {
 				$color = '#effeff';
 			}
-
 			?>
 			<div class="svsw-edit-tag-wrap" data-type="<?php echo esc_attr( $type ); ?>">
 				<div class="form-field svsw-input-field svsw-input-button"<?php echo 'button' !== $type ? ' style="display: none;"' : ''; ?>>
@@ -415,5 +403,5 @@ if ( ! class_exists( 'SVSWAdminSwatch' ) ) {
 	}
 }
 
-$svsw_admin_swatch = new SVSWAdminSwatch();
+$svsw_admin_swatch = new SVSW_Admin_Swatch();
 $svsw_admin_swatch->init();

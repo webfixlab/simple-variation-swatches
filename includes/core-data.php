@@ -11,7 +11,6 @@ global $svsw__;
 
 $svsw__ = array(
 	'name'            => __( 'Simple Variation Swatches', 'simple-variation-swatches' ),
-	'version'         => '1.1.2',
 	'notice'          => array(),
 	'notice_interval' => 15, // in days.
 );

@@ -7,16 +7,12 @@
  * @since      2.0
  */
 
-if ( ! class_exists( 'SVSWLoader' ) ) {
-
-
+if ( ! class_exists( 'SVSW_Loader' ) ) {
 
 	/**
 	 * Simple variation swatch loader class
 	 */
-	class SVSWLoader {
-
-
+	class SVSW_Loader {
 
 		/**
 		 * Initialize plugin loader
@@ -28,8 +24,6 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 
 			add_action( 'before_woocommerce_init', array( $this, 'wc_init' ) );
 		}
-
-
 
 		/**
 		 * Activate plugin functionality
@@ -50,7 +44,6 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 		 * Plugin activation process
 		 */
 		public function do_activate() {
-
 			include SVSW_PATH . 'includes/core-data.php';
 
 			// check prerequisits.
@@ -68,8 +61,8 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 			add_action( 'admin_head', array( $this, 'admin_head' ) );
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
-			include SVSW_PATH . 'includes/class/admin/class-svswadminswatch.php';
-			include SVSW_PATH . 'includes/class/admin/class-svswsettings.php';
+			include SVSW_PATH . 'includes/class/admin/class-svsw-admin-swatch.php';
+			include SVSW_PATH . 'includes/class/admin/class-svsw-settings.php';
 
 			include SVSW_PATH . 'includes/class/class-svsw.php';
 		}
@@ -105,28 +98,23 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 			}
 		}
 
-
-
 		/**
 		 * Add frontend scripts and styles
 		 */
 		public function frontend_scripts() {
-			global $svsw__;
-
 			if ( ! $this->in_front_scope() ) {
 				return;
 			}
 
-			wp_enqueue_style( 'svsw-frontend', plugin_dir_url( SVSW ) . 'assets/frontend.css', array(), $svsw__['version'], 'all' );
+			wp_enqueue_style( 'svsw-frontend', plugin_dir_url( SVSW ) . 'assets/frontend.css', array(), SVSW_VER, 'all' );
 
-			wp_register_script( 'svsw-frontend', plugin_dir_url( SVSW ) . 'assets/frontend.js', array( 'jquery' ), $svsw__['version'], true );
-			wp_enqueue_script( 'svsw-frontend', plugin_dir_url( SVSW ) . 'assets/frontend.js', array( 'jquery' ), $svsw__['version'], false );
+			wp_register_script( 'svsw-frontend', plugin_dir_url( SVSW ) . 'assets/frontend.js', array( 'jquery' ), SVSW_VER, true );
+			wp_enqueue_script( 'svsw-frontend' );
 
 			// localize script.
 			$local_var = array(
 				'svsw' => 'yes',
 			);
-
 			wp_localize_script( 'svsw-frontend', 'wcsvw_frontend', $local_var );
 		}
 
@@ -134,16 +122,13 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 		 * Add admin scripts and styles
 		 */
 		public function admin_scripts() {
-			global $svsw__;
-
 			if ( ! $this->is_in_scope() ) {
 				return;
 			}
 
 			// enqueue style.
-			wp_register_style( 'svsw_admin_style', plugin_dir_url( SVSW ) . 'assets/admin/admin.css', false, $svsw__['version'] );
-
-			wp_enqueue_style( 'svsw_admin_style' );
+			wp_register_style( 'svsw-admin-style', plugin_dir_url( SVSW ) . 'assets/admin/admin.css', array(), SVSW_VER );
+			wp_enqueue_style( 'svsw-admin-style' );
 			wp_enqueue_style( 'wp-color-picker' );
 
 			wp_enqueue_script( 'jquery' );
@@ -151,7 +136,8 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 			// load media uploader script.
 			wp_enqueue_media();
 
-			wp_enqueue_script( 'svsw_admin_script', plugin_dir_url( SVSW ) . 'assets/admin/admin.js', array( 'wp-color-picker' ), $svsw__['version'], true );
+			wp_register_script( 'svsw-admin-script', plugin_dir_url( SVSW ) . 'assets/admin/admin.js', array( 'wp-color-picker' ), SVSW_VER, true );
+			wp_enqueue_script( 'svsw-admin-script' );
 
 			$var = array(
 				'ajaxurl'    => admin_url( 'admin-ajax.php' ),
@@ -162,7 +148,7 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 			// apply hook for editing localized variables in admin script.
 			$var = apply_filters( 'svsw_update_admin_local_val', $var );
 
-			wp_localize_script( 'svsw_admin_script', 'svsw_admin_data', $var );
+			wp_localize_script( 'svsw-admin-script', 'svsw_admin_data', $var );
 		}
 
 		/**
@@ -177,7 +163,6 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 		 * Add admin bar menu of the plugin
 		 */
 		public function admin_menu() {
-
 			// Main menu.
 			add_menu_page(
 				esc_html__( 'Variation Swatch', 'simple-variation-swatches' ),
@@ -205,7 +190,6 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 		 * Render plugin settings page
 		 */
 		public function settings_page() {
-
 			// check user capabilities.
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
@@ -215,7 +199,7 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 			settings_errors( 'wporg_messages' );
 
 			// Display admin html content.
-			$settings_class = new SVSWSettings();
+			$settings_class = new SVSW_Settings();
 			$settings_class->settings_page();
 		}
 
@@ -227,7 +211,6 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 		 * @param array $links current plugin action links.
 		 */
 		public function action_links( $links ) {
-			global $svsw__;
 			$action_links = array();
 
 			$action_links['settings'] = sprintf(
@@ -357,19 +340,16 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 				esc_url( $svsw__['urls']['wc'] ),
 				esc_html__( 'WooCommerce', 'simple-variation-swatches' )
 			);
-
 			?>
 			<div class="error">
 				<p>
 					<?php
-
-					printf(
-						// translators: %1$s: plugin name with url, %2$s: base plugin with url.
-						esc_html__( '%1$s plugin has been deactivated due to deactivation of %2$s plugin', 'simple-variation-swatches' ),
-						wp_kses_post( $plugin ),
-						wp_kses_post( $base )
-					);
-
+						printf(
+							// translators: %1$s: plugin name with url, %2$s: base plugin with url.
+							esc_html__( '%1$s plugin has been deactivated due to deactivation of %2$s plugin', 'simple-variation-swatches' ),
+							wp_kses_post( $plugin ),
+							wp_kses_post( $base )
+						);
 					?>
 				</p>
 			</div>
@@ -397,43 +377,36 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 				esc_url( $svsw__['urls']['review'] ),
 				esc_html__( 'WordPress.org', 'simple-variation-swatches' )
 			);
-
 			?>
 			<div class="notice notice-info is-dismissible">
 				<h3><?php echo esc_html( $svsw__['name'] ); ?></h3>
 				<p>
 					<?php
-
-					printf(
-						// translators: %1$s: plugin name with url, %2$s: plugin review url on WordPress.
-						esc_html__( 'Excellent! You\'ve been using %1$s for a while. We\'d appreciate if you kindly rate us on %2$s', 'simple-variation-swatches' ),
-						wp_kses_post( $plugin ),
-						wp_kses_post( $review )
-					);
-
+						printf(
+							// translators: %1$s: plugin name with url, %2$s: plugin review url on WordPress.
+							esc_html__( 'Excellent! You\'ve been using %1$s for a while. We\'d appreciate if you kindly rate us on %2$s', 'simple-variation-swatches' ),
+							wp_kses_post( $plugin ),
+							wp_kses_post( $review )
+						);
 					?>
 				</p>
 				<p>
 					<?php
-
-					printf(
-						'<a href="%s" class="button-primary">%s</a>&nbsp;',
-						esc_url( $svsw__['urls']['plugin'] ),
-						esc_html__( 'Rate it', 'simple-variation-swatches' )
-					);
-
-					printf(
-						'<a href="%srate_svsw=done" class="button">%s</a>&nbsp;',
-						esc_url( $page ),
-						esc_html__( 'Already Did', 'simple-variation-swatches' )
-					);
-
-					printf(
-						'<a href="%srate_svsw=cancel" class="button">%s</a>',
-						esc_url( $page ),
-						esc_html__( 'Cancel', 'simple-variation-swatches' )
-					);
-
+						printf(
+							'<a href="%s" class="button-primary">%s</a>&nbsp;',
+							esc_url( $svsw__['urls']['plugin'] ),
+							esc_html__( 'Rate it', 'simple-variation-swatches' )
+						);
+						printf(
+							'<a href="%srate_svsw=done" class="button">%s</a>&nbsp;',
+							esc_url( $page ),
+							esc_html__( 'Already Did', 'simple-variation-swatches' )
+						);
+						printf(
+							'<a href="%srate_svsw=cancel" class="button">%s</a>',
+							esc_url( $page ),
+							esc_html__( 'Cancel', 'simple-variation-swatches' )
+						);
 					?>
 				</p>
 			</div>
@@ -503,5 +476,5 @@ if ( ! class_exists( 'SVSWLoader' ) ) {
 	}
 }
 
-$svsw_loader_class = new SVSWLoader();
+$svsw_loader_class = new SVSW_Loader();
 $svsw_loader_class->init();
