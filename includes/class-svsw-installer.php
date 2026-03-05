@@ -7,6 +7,8 @@
  * @since      2.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 if ( ! class_exists( 'SVSW_Installer' ) ) {
 
 	/**
@@ -14,25 +16,33 @@ if ( ! class_exists( 'SVSW_Installer' ) ) {
 	 */
 	class SVSW_Installer {
 
-        public static function install(){
-            if( !self::has_wc() ){
-                add_action( 'admin_notices', array( __CLASS__, 'missing_wc' ) );
-                return false;
-            }
+		/**
+		 * Plugin installation handler
+		 */
+		public static function install() {
+			if ( ! self::has_wc() ) {
+				add_action( 'admin_notices', array( __CLASS__, 'missing_wc' ) );
+				return false;
+			}
 
-            // register plugin activation hooks.
-            register_activation_hook( SVSW, array( __CLASS__, 'activate' ) );
+			// register plugin activation hooks.
+			register_activation_hook( SVSW, array( __CLASS__, 'activate' ) );
 			register_deactivation_hook( SVSW, array( __CLASS__, 'deactivate' ) );
 
-            // add extra links right under plug.
+			// add extra links right under plug.
 			add_filter( 'plugin_action_links_' . plugin_basename( SVSW ), array( __CLASS__, 'action_links' ) );
 			add_filter( 'plugin_row_meta', array( __CLASS__, 'desc_meta' ), 10, 2 );
 
-            return true;
-        }
+			return true;
+		}
 
-        public static function has_wc(){
-			if( !function_exists( 'is_plugin_active' ) ){
+		/**
+		 * Checks if base plugin is active or not
+		 *
+		 * @return bool
+		 */
+		public static function has_wc() {
+			if ( ! function_exists( 'is_plugin_active' ) ) {
 				include_once ABSPATH . 'wp-admin/includes/plugin.php';
 			}
 
@@ -49,7 +59,7 @@ if ( ! class_exists( 'SVSW_Installer' ) ) {
 			return true;
 		}
 
-        /**
+		/**
 		 * Notice for base plugin missing
 		 */
 		public static function missing_wc() {
@@ -82,11 +92,10 @@ if ( ! class_exists( 'SVSW_Installer' ) ) {
 			<?php
 		}
 
-        /**
+		/**
 		 * Activate plugin functionality
 		 */
 		public static function activate() {
-			// self::do_activate();
 			flush_rewrite_rules();
 		}
 
@@ -97,7 +106,7 @@ if ( ! class_exists( 'SVSW_Installer' ) ) {
 			flush_rewrite_rules();
 		}
 
-        /**
+		/**
 		 * Add plugin action links on all plugins page
 		 *
 		 * @param array $links current plugin action links.
@@ -138,5 +147,5 @@ if ( ! class_exists( 'SVSW_Installer' ) ) {
 
 			return array_merge( $links, $row_meta );
 		}
-    }
+	}
 }

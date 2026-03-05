@@ -7,6 +7,8 @@
  * @since      3.0.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 if ( ! class_exists( 'SVSW_Front' ) ) {
 
 	/**
@@ -74,14 +76,13 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 				$display_name = true;
 				$hide_attr    = '';
 			}
-
 			?>
 			<div class="svsw-frontend-wrap <?php echo esc_attr( $hide_attr ); ?>">
 				<?php
-					foreach ( $attributes as $attribute_name => $options ) {
-						self::$taxonomy = $attribute_name;
-						self::atts_to_swatch( $attribute_name, $options, $display_name );
-					}
+				foreach ( $attributes as $attribute_name => $options ) {
+					self::$taxonomy = $attribute_name;
+					self::atts_to_swatch( $attribute_name, $options, $display_name );
+				}
 				?>
 			</div>
 			<?php
@@ -119,39 +120,40 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 			$anb = isset( self::$data['att_name_background'] ) ? self::$data['att_name_background'] : '';
 
 			$no_padding = empty( $anb ) ? 'an-no-pad' : '';
-			$anc = ( empty( $anb ) && '#ffffff' === $anc ) || $anc === $anb ? '' : $anc;
+			$anc        = ( empty( $anb ) && '#ffffff' === $anc ) || $anc === $anb ? '' : $anc;
 
 			$anc = ! empty( $anc ) ? 'color: ' . esc_attr( $anc ) . ';' : '';
 			$anb = ! empty( $anb ) ? 'background-color: ' . esc_attr( $anb ) . ';margin-bottom: 10px;' : '';
 
 			// attribute block design.
 			$block_design = isset( self::$data['att_block_design'] ) ? 'att-' . self::$data['att_block_design'] : '';
-
 			?>
 			<div class="svsw-wrap <?php echo esc_attr( $block_design ); ?>">
 				<?php if ( $show_name ) : ?>
-					<?php 
-						echo wp_kses_post( sprintf(
-							'<label class="attr-name %s" style="%s%s">',
-							esc_attr( $no_padding ),
-							esc_html( $anc ),
-							esc_html( $anb ),
-						) );
+					<?php
+						echo wp_kses_post(
+							sprintf(
+								'<label class="attr-name %s" style="%s%s%s">',
+								esc_attr( $no_padding ),
+								esc_html( $anc ),
+								esc_html( $anb ),
+								$att_name_underline ? 'border-bottom: 1px solid #888;' : ''
+							)
+						);
 
 						echo esc_html( $att_name );
 						do_action( 'svsw_after_att_name', $attribute_name, self::$pack );
 					?>
 					</label>
 				<?php endif; ?>
-				<?php echo $show_name && $att_name_underline ? '<hr>' : ''; ?>
 				<div class="svsw-attr-wrap" data-taxonomy="<?php echo esc_attr( sanitize_title( $attribute_name ) ); ?>">
 					<?php
 						// display swatches.
-						if ( is_wp_error( $terms ) ) {
-							self::skipped_atts( $options, $attribute_name );
-						} else {
-							self::display_swatches( $terms, $options, $att_name );
-						}
+					if ( is_wp_error( $terms ) ) {
+						self::skipped_atts( $options, $attribute_name );
+					} else {
+						self::display_swatches( $terms, $options, $att_name );
+					}
 					?>
 				</div>
 			</div>
@@ -161,9 +163,9 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 		/**
 		 * Display swatch items
 		 *
-		 * @param object $terms          WP Term objects of the product attribute.
-		 * @param array  $options        product attribute options.
-		 * @param string $attribute_name product attribute name.
+		 * @param object | array $terms          WP Term objects of the product attribute.
+		 * @param array          $options        product attribute options.
+		 * @param string         $attribute_name product attribute name.
 		 */
 		public static function display_swatches( $terms, $options, $attribute_name ) {
 			// list of unavailable swatch items.
@@ -219,7 +221,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 		/**
 		 * Display skipped options that didn't have any swatch data
 		 *
-		 * @param array $skipped_terms  attribute options that didn't have any swatch settings data.
+		 * @param array  $skipped_terms  attribute options that didn't have any swatch settings data.
 		 * @param string $attribute_name product attribute name.
 		 */
 		public static function skipped_atts( $skipped_terms, $attribute_name ) {
@@ -242,7 +244,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 
 			if ( 'default' === $variation_to ) {
 				printf(
-					'<select name="%s" data-term="%s" class="svsw-swatch-dropdown" style="%s">',
+					'<select name="%s" data-term="%s" class="svsw-swatch svsw-swatch-dropdown" style="%s">',
 					esc_attr( $attribute_name ),
 					esc_attr( $attribute_name ),
 					esc_html( $font_size )
@@ -251,7 +253,6 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 			}
 
 			foreach ( $skipped_terms as $opt_name => $opt_value ) {
-
 				if ( is_numeric( $opt_name ) ) {
 					$opt_name = $opt_value;
 				}
@@ -300,7 +301,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 
 			$color_size = isset( $data['svsw_size_color'] ) && ! empty( $data['svsw_size_color'] ) ? $data['svsw_size_color'] : 31;
 			// dynamic border width for selected and un-selected swatch.
-			$border     = (int) ( $color_size / 15 );
+			$border = (int) ( $color_size / 15 );
 
 			$tooltip = '';
 			if ( isset( $data['tooltip'] ) && ! empty( $data['tooltip'] ) ) {
@@ -316,7 +317,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 				$value = 'background-color: ' . esc_attr( $value ) . ';';
 
 				printf(
-					'<span class="svsw-swatch svsw-color-image %s" style="%s width: %spx; height: %spx; border: %spx solid #ffffff" data-term="%s" data-term="%s" data-tooltip="%s"></span>',
+					'<span class="svsw-swatch svsw-color-image %s" style="%s width: %spx; height: %spx; border: %spx solid #ffffff" data-term="%s" data-tooltip="%s"></span>',
 					esc_attr( $color_shape ),
 					esc_html( $value ),
 					esc_html( $color_size ),
@@ -361,7 +362,6 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 				</div>
 				<?php
 			}
-
 			?>
 			</div>
 			<?php

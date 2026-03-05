@@ -7,6 +7,8 @@
  * @since      3.0.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 
 	/**
@@ -170,7 +172,7 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 							</th>
 							<td class="forminp forminp-text">
 								<?php $att_name_color = isset( self::$data['att_name_color'] ) ? self::$data['att_name_color'] : ''; ?>
-								<input name="att_name_color" type="text" class="svsw-colorpicker" value="<?php esc_html_e( $att_name_color ); ?>" data-default-color="">
+								<input name="att_name_color" type="text" class="svsw-colorpicker" value="<?php esc_html( $att_name_color ); ?>" data-default-color="">
 							</td>
 						</tr>
 						<tr valign="top">
@@ -179,7 +181,7 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 							</th>
 							<td class="forminp forminp-text">
 								<?php $att_name_background = isset( self::$data['att_name_background'] ) ? self::$data['att_name_background'] : ''; ?>
-								<input name="att_name_background" type="text" class="svsw-colorpicker" value="<?php esc_html_e( $att_name_background ); ?>" data-default-color="">
+								<input name="att_name_background" type="text" class="svsw-colorpicker" value="<?php esc_html( $att_name_background ); ?>" data-default-color="">
 							</td>
 						</tr>
 						<tr valign="top">
@@ -193,12 +195,12 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 									$options = array(
 										'default' => __( 'None', 'simple-variation-swatches' ),
 										'block-1' => __( 'Round corner', 'simple-variation-swatches' ),
-										'block-2' => __( 'Square', 'simple-variation-swatches' )
+										'block-2' => __( 'Square', 'simple-variation-swatches' ),
 									);
 
 									echo '<select name="att_block_design">';
 									foreach ( $options as $key => $value ) {
-										echo sprintf(
+										printf(
 											'<option value="%s" %s>%s</option>',
 											esc_attr( $key ),
 											$key === $design ? 'selected' : '',
@@ -206,7 +208,7 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 										);
 									}
 									echo '</select>';
-								?>
+									?>
 							</td>
 						</tr>
 					</table>
@@ -303,14 +305,14 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 			<select name="attr_to_swatches">
 				<option value=""><?php echo esc_html__( 'Choose type', 'simple-variation-swatches' ); ?></option>
 				<?php
-                    foreach ( $options as $val => $label ) {
-                        printf(
-                            '<option value="%s" %s>%s</option>',
-                            esc_attr( $val ),
-                            $att_to_swatch === $val ? esc_attr( 'selected' ) : '',
-                            esc_html( $label )
-                        );
-                    }
+				foreach ( $options as $val => $label ) {
+					printf(
+						'<option value="%s" %s>%s</option>',
+						esc_attr( $val ),
+						$att_to_swatch === $val ? esc_attr( 'selected' ) : '',
+						esc_html( $label )
+					);
+				}
 				?>
 			</select>
 			<?php
@@ -333,7 +335,7 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 		/**
 		 * Display variation options behavior
 		 */
-		public static function variation_behavior(){
+		public static function variation_behavior() {
 			$behave = isset( self::$data['variation_behavior'] ) ? self::$data['variation_behavior'] : '';
 
 			$options = array(
@@ -343,14 +345,14 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 			?>
 			<select name="variation_behavior">
 				<?php
-					foreach ( $options as $val => $label ) {
-						printf(
-							'<option value="%s" %s>%s</option>',
-							esc_attr( $val ),
-							$behave === $val ? esc_attr( 'selected' ) : '',
-							esc_html( $label )
-						);
-					}
+				foreach ( $options as $val => $label ) {
+					printf(
+						'<option value="%s" %s>%s</option>',
+						esc_attr( $val ),
+						$behave === $val ? esc_attr( 'selected' ) : '',
+						esc_html( $label )
+					);
+				}
 				?>
 			</select>
 			<?php

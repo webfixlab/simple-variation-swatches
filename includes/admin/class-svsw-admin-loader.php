@@ -7,6 +7,8 @@
  * @since      2.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 if ( ! class_exists( 'SVSW_Admin_Loader' ) ) {
 
 	/**
@@ -31,10 +33,10 @@ if ( ! class_exists( 'SVSW_Admin_Loader' ) ) {
 			self::move_admin_notice();
 			self::menu_icon_css();
 
-            self::save_setting();
+			self::save_setting();
 		}
 
-        /**
+		/**
 		 * Move admin notices and remove all for displaying them later in the intended position
 		 */
 		public static function move_admin_notice() {
@@ -72,29 +74,29 @@ if ( ! class_exists( 'SVSW_Admin_Loader' ) ) {
 			<?php
 		}
 
-        /**
-         * Save admin settings
-         */
-        public static function save_setting(){
-            global $svsw__;
-    
-            if ( ! isset( $_POST['svsw_nonce_field'] ) ) {
-                return;
-            }
-    
-            if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['svsw_nonce_field'] ) ), 'svsw_save' ) ) {
-                return;
-            }
-    
-            $data = array();
-            foreach( $svsw__['fields'] as $key => $type ){
-                if( isset( $_POST[ $key ] ) ) {
-                    $data[ $key ] = 'text' === $type ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : sanitize_key( wp_unslash( $_POST[ $key ] ) );
-                }
-            }
-    
-            update_option( 'svsw_settings', $data );
-        }
+		/**
+		 * Save admin settings
+		 */
+		public static function save_setting() {
+			global $svsw__;
+
+			if ( ! isset( $_POST['svsw_nonce_field'] ) ) {
+				return;
+			}
+
+			if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['svsw_nonce_field'] ) ), 'svsw_save' ) ) {
+				return;
+			}
+
+			$data = array();
+			foreach ( $svsw__['fields'] as $key => $type ) {
+				if ( isset( $_POST[ $key ] ) ) {
+					$data[ $key ] = 'text' === $type ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : sanitize_key( wp_unslash( $_POST[ $key ] ) );
+				}
+			}
+
+			update_option( 'svsw_settings', $data );
+		}
 
 		/**
 		 * Add admin bar menu of the plugin
@@ -131,8 +133,8 @@ if ( ! class_exists( 'SVSW_Admin_Loader' ) ) {
 			// show error/update messages.
 			settings_errors( 'wporg_messages' );
 
-            // render settings page.
-            SVSW_Admin_Page::settings_page();
+			// render settings page.
+			SVSW_Admin_Page::settings_page();
 		}
 
 		/**

@@ -7,6 +7,8 @@
  * @since      2.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 ?>
 <div class="svsw-sidebar">
 	<div class="sidebar_top">

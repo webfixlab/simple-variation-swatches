@@ -7,6 +7,8 @@
  * @since      2.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 global $svsw__;
 
 $svsw__ = array(
@@ -26,7 +28,7 @@ $svsw__['admin_scopes'] = array(
 $svsw__['urls'] = array(
 	'plugin'  => 'https://webfixlab.com/plugins/simple-variation-swatches-woocommerce/',
 	'support' => 'https://webfixlab.com/contact/',
-	'review'  => 'https://wordpress.org/support/plugin/simple-variation-swatches/reviews/?rate=5#new-post',
+	'review'  => 'https://wordpress.org/support/plugin/simple-variation-swatches/reviews/',
 	'wc'      => 'https://wordpress.org/plugins/woocommerce/',
 );
 

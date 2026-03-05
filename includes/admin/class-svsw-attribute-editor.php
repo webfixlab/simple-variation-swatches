@@ -7,6 +7,8 @@
  * @since      3.0.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 
 	/**

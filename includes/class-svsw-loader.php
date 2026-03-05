@@ -7,6 +7,8 @@
  * @since      2.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 if ( ! class_exists( 'SVSW_Loader' ) ) {
 
 	/**
@@ -20,7 +22,7 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 		public static function init_plugin() {
 			include SVSW_PATH . 'includes/class-svsw-installer.php';
 
-			if( !SVSW_Installer::install() ){
+			if ( ! SVSW_Installer::install() ) {
 				return;
 			}
 
@@ -33,7 +35,7 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 		 */
 		public static function init() {
 			load_plugin_textdomain( 'simple-variation-swatches', false, plugin_basename( dirname( SVSW ) ) . '/languages' );
-			
+
 			self::includes();
 
 			// load admin navigations and pages.
@@ -43,9 +45,12 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_scripts' ) );
 		}
 
-		public static function includes(){
+		/**
+		 * Include necessary plugin files.
+		 */
+		public static function includes() {
 			include SVSW_PATH . 'includes/core-data.php';
-			
+
 			include SVSW_PATH . 'includes/admin/class-svsw-admin-page.php';
 			include SVSW_PATH . 'includes/admin/class-svsw-admin-loader.php';
 
@@ -120,11 +125,11 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 			global $post;
 			global $product;
 
-			if( empty( $post ) || ! isset( $post->ID ) ){
+			if ( empty( $post ) || ! isset( $post->ID ) ) {
 				return;
 			}
 
-			if( 'object' !== gettype( $product ) ){
+			if ( 'object' !== gettype( $product ) ) {
 				$product = wc_get_product( $post->ID );
 			}
 
@@ -132,22 +137,22 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 				return;
 			}
 
-			wp_register_style( 'svsw-front-css', plugin_dir_url( SVSW ) . 'assets/frontend.css', array(), SVSW_VER, 'all' );
+			wp_register_style( 'svsw-front-css', plugin_dir_url( SVSW ) . 'assets/css/svsw-front.css', array(), SVSW_VER, 'all' );
 			wp_enqueue_style( 'svsw-front-css' );
-			
-			wp_register_script( 'svsw-front-js', plugin_dir_url( SVSW ) . 'assets/frontend.js', array( 'jquery' ), SVSW_VER, true );
+
+			wp_register_script( 'svsw-front-js', plugin_dir_url( SVSW ) . 'assets/js/svsw-front.js', array( 'jquery' ), SVSW_VER, true );
 			wp_enqueue_script( 'svsw-front-js' );
 
 			// localize script.
 			$data = array(
 				'svsw'     => 'yes',
 				'type'     => $product->get_type(),
-				'settings' => get_option( 'svsw_settings' )
+				'settings' => get_option( 'svsw_settings' ),
 			);
 
-			if( 'variable' === $data['type'] ){
-				$data[ 'variations' ] = $product->get_available_variations();
-			}
+			// if ( 'variable' === $data['type'] ) {
+			// $data[ 'variations' ] = $product->get_available_variations();
+			// }
 
 			wp_localize_script( 'svsw-front-js', 'svsw_front', $data );
 		}
