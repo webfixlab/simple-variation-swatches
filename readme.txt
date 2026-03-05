@@ -1,16 +1,16 @@
 === Simple Variation Swatches for WooCommerce ===
-Contributors: webfixlab, aikya, smshahriar
-Tags: woocommerce variation, woocommerce variation swatches, woocommerce, variation swatches, woocommerce attributes, product attributes, product color, product size, variable product attributes, variation product swatches, color variation swatch, image variation swatch, printful color swatches
+Contributors: aikya, smshahriar, webfixlab
+Tags: woocommerce variation, woocommerce variation swatches, woocommerce, variation swatches, woocommerce attributes
 Requires at least: 4.9
-Tested up to: 6.8.2
-Stable tag: 1.1.3
+Tested up to: 6.9.1
+Stable tag: 3.0.0
 Requires PHP: 7.0
 WC requires at least: 3.6
-WC tested up to: 10.1.2
+WC tested up to: 10.5.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A truly lightweight EASY to use and super FAST WooCommerce variation swatches solution to replace default variation dropdown with button, color, image & radio button fields.
+Convert plain variation attributes to beautiful colors, images, buttons or radio buttons.
 
 == Description ==
 
@@ -20,16 +20,18 @@ The best part? No complicated features or slow page speeds here! Get ready for a
 
 [Demo](http://demo.webfixlab.com/product/simple-variation-swatches/) | [Docs](https://docs.webfixlab.com/kb/simple-variation-swatches-for-woocommerce/) | [Bug Report](https://wordpress.org/support/plugin/simple-variation-swatches/) | [Customize Request](https://webfixlab.com/contact/)
 
-== FEATURES ==
+**FEATURES**
 
-* Supports different types of swatches like color, image, button, radio button and dropdown
+* New! Automatic disable or hide stockout variations.
+* New! Attribute and it's block design options.
+* WooCommerce High-Performance Order Storage (HPOS) enabled
+* 5 types swatches: color, image, button, radio button and dropdown
 * Option to hide attribute labels
 * Option to set default swatch or variation type
 * Set color and image swatches size
 * 3 styles for color and image swatches: square, circle and round corner
 * Set font size for button and radio button
 * Truly lightweight and extremely fast, almost no impact on page speed
-* WooCommerce High-Performance Order Storage (HPOS) enabled
 
 **HOW TO ADD DIFFERENT VARIATION SWATCHES**
 
@@ -67,5 +69,14 @@ Yes, just send your [request here](https://webfixlab.com/contact/).
 == Screenshots ==
 
 1. Front-end View
-2. Settings
-3. Swatch Type Selection
+2. General settings
+3. Appearence
+4. Swatch Type Selection
+
+== Changelog ==
+
+= 3.0.0 2026-03-04 =
+
+**Simple Variation Swatches**
+
+* Fix - Swatches only hiding but not disabling.

@@ -2,7 +2,7 @@
     display: none;
 }
 .svsw-wrap {
-    margin-bottom: 40px;
+    margin-bottom: 15px;
 }
 .svsw-hide-attr .svsw-wrap {
     margin-bottom: 25px;
@@ -10,19 +10,16 @@
 .svsw-attr-wrap:has(.svsw-type-image), .svsw-attr-wrap:has(.svsw-type-color), .svsw-attr-wrap:has(.svsw-type-button) {
     display: flex;
     flex-wrap: wrap;
-    margin: 10px 0 0 0;
     padding: 0;
     list-style: none;
     position: relative;
+    align-items: center;
 } 
 .svsw-swatch {
     transition: .5s;
     margin-right: 10px;
     margin-bottom: 10px;
     color: #222;
-}
-.svsw-swatch {
-    border-color: rgba(0,0,0,0) !important;
 }
 .svsw-swatch.svsw-btn {
     border-color: rgba(0,0,0,0.25) !important;
@@ -42,8 +39,8 @@
     position: relative;
 }
 .svsw-swatch-content input[type=radio] {
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     accent-color: black;
     transition: .5s;
 }
@@ -72,7 +69,6 @@
 }
 .svsw-tooltip {
     margin-bottom: 5px;
-    margin-left: -62px;
     padding: 7px;
     min-width: 100px;
     border-radius: 3px;
@@ -89,6 +85,12 @@
     left: 50%;
     z-index: 999;
     transform: translateZ(0);
+}
+.svsw-type-color .svsw-tooltip{
+    margin-left: -56px;
+}
+.svsw-type-image .svsw-tooltip{
+    margin-left: -62px;
 }
 .svsw-tooltip:after {
     pointer-events: none;
@@ -107,13 +109,14 @@
     content: " ";
 }
 .svsw-type-image .svsw-tooltip {
-    padding: 2px;
+    padding: 5px;
     border-radius: 3px;
-    width: 105px;
-    height: 125px;
+    width: 116px;
+    height: 116px;
+    display: inline-table;
 }
 .svsw-type-image .svsw-tooltip:after {
-    bottom: -5%;
+    bottom: -3%;
 }
 .svsw-type-image .svsw-tooltip img {
     width: 100px;
@@ -127,7 +130,7 @@
     margin: 0;
 }
 span.svsw-btn {
-    padding: 10px 20px;
+    padding: 5px 15px;
     display: inline-block;
     line-height: 1.3;
     text-align: center;
@@ -153,34 +156,76 @@ a.svsw-reset.reset_variations {
     padding-left: 5px;
 }
 .svsw-wrap hr {
-    margin: 5px 0px 10px 0;
+    margin: 0 0 15px 0;
 }
-label.attr-name.demo-block-1 {
+label.attr-name{
     display: block;
     padding: 5px 15px;
-    background: #d1d1d1;
-    color: #000;
-}
-label.attr-name.demo-block-2 {
-    display: block;
-    padding: 5px 15px;
-    color: #ffffff;
-    background: #445f93;
-    display: block;
 }
 select.svsw-swatch-dropdown {
-    padding: 10px 20px;
+    padding: 5px 10px;
+}
+.svsw-wrap.att-block-1, .svsw-wrap.att-block-2{
+    background: #ffffff;
+    padding: 15px;
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.2);
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
+    max-width: 600px;
+    max-width: 99%;
+    margin: 0 auto;
+    margin-bottom: 20px;
 }
 .svsw-wrap.att-block-1{
-    background: #ffffff;
     border-radius: 25px;
-    padding: 20px;
-    -webkit-box-shadow: 0 8px 16px 0 rgba(20, 20, 20, 0.3);
-    box-shadow: 0 8px 16px 0 rgba(20, 20, 20, 0.3);
-    max-width: 600px;
 }
-.att-block-1 label.attr-name.demo-block-1, .att-block-1 label.attr-name.demo-block-2{
+.att-block-1 label.attr-name{
     padding: 5px 20px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+}
+label.attr-name.an-no-pad {
+    padding-left: 0;
+}
+
+.svsw-swatch.svsw-disabled {
+    pointer-events: none;
+    position: relative;
+    opacity: 0.6;
+}
+.svsw-swatch.svsw-disabled::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -27%;
+    width: 150%;
+    height: 2px;
+    background-color: #000000;
+    transform: rotate(45deg);
+} 
+.svsw-swatch.svsw-disabled::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -27%;
+    width: 150%;
+    height: 2px;
+    background-color: #000000;
+    transform: rotate(-45deg);
+}
+.svsw-swatch-radio.svsw-disabled::before, .svsw-swatch-radio.svsw-disabled::after{
+    left: 20px;
+    width: 10%;
+}
+@media screen and (max-width: 767px) {
+    .svsw-swatch.svsw-btn{
+        font-size: 15px !important;
+        padding: 5px 10px;
+    }
+    .svsw-wrap.att-block-1, .svsw-wrap.att-block-2{
+        padding: 15px;
+    }
+    select.svsw-swatch-dropdown {
+        padding: 5px 5px;
+        font-size: 14px !important;
+    }
 }

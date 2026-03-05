@@ -17,7 +17,11 @@
     });
     
     $( document ).ready( function(){
-        $( '.svsw-color-field' ).wpColorPicker();
+        $( '.svsw-colorpicker' ).wpColorPicker();
+
+        $(document).on( 'click', '.notice.is-dismissible', function(){
+			$(this).hide( 'slow' ).remove();
+		});
 
         // handle settings nav
         $( '.nav-tab' ).on( 'click', function(){

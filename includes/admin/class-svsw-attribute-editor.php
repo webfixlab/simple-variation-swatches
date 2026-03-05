@@ -4,35 +4,35 @@
  *
  * @package    WordPress
  * @subpackage Simple Variation Swatches
- * @since      2.0
+ * @since      3.0.0
  */
 
-if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
+if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 
 	/**
 	 * Admin swatch class
 	 */
-	class SVSW_Admin_Swatch {
+	class SVSW_Attribute_Editor {
 
 		/**
 		 * Initialize admin swatch class
 		 */
-		public function init() {
-			add_action( 'admin_init', array( $this, 'init_swatch' ) );
-			add_action( 'add_tag_form_fields', array( $this, 'new_term' ), 20, 1 );
+		public static function init() {
+			add_action( 'admin_init', array( __CLASS__, 'init_swatch' ) );
+			add_action( 'add_tag_form_fields', array( __CLASS__, 'new_term' ), 20, 1 );
 
-			add_action( 'create_term', array( $this, 'save_swatches' ), 10, 3 );
-			add_action( 'created_term', array( $this, 'save_swatches' ), 10, 3 );
-			add_action( 'edited_term', array( $this, 'save_swatches' ), 10, 3 );
-			add_action( 'edit_term', array( $this, 'save_swatches' ), 10, 3 );
+			add_action( 'create_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
+			add_action( 'created_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
+			add_action( 'edited_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
+			add_action( 'edit_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
 		}
 
 		/**
 		 * Initialize admin swatch option
 		 */
-		public function init_swatch() {
+		public static function init_swatch() {
 			// attribute type selection options.
-			add_filter( 'product_attributes_type_selector', array( $this, 'add_att_type' ), 20 );
+			add_filter( 'product_attributes_type_selector', array( __CLASS__, 'add_att_type' ), 20 );
 
 			// get all woocomerce attributes.
 			$atts = wc_get_attribute_taxonomies();
@@ -43,15 +43,17 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 				$name = wc_attribute_taxonomy_name( $tax->attribute_name );
 
 				// add custom field to attribute edit form.
-				add_action( 'pa_' . $tax->attribute_name . '_edit_form', array( $this, 'swatch_meta_box' ), 20, 2 );
+				add_action( 'pa_' . $tax->attribute_name . '_edit_form', array( __CLASS__, 'swatch_meta_box' ), 20, 2 );
 
 				// custom column - for color and image type attribute only.
-				if ( $this->if_add_term_column( $tax ) ) {
+				if ( self::if_add_term_column( $tax ) ) {
+
 					// add content to custom column created.
-					add_filter( 'manage_' . $name . '_custom_column', array( $this, 'term_list_column' ), 10, 3 );
+					add_filter( 'manage_' . $name . '_custom_column', array( __CLASS__, 'term_list_column' ), 10, 3 );
 
 					// add new custom column to attribute list.
-					add_filter( 'manage_edit-' . $name . '_columns', array( $this, 'term_list_header' ), 20, 1 );
+					add_filter( 'manage_edit-' . $name . '_columns', array( __CLASS__, 'term_list_header' ), 20, 1 );
+
 				}
 			}
 		}
@@ -61,7 +63,7 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 		 *
 		 * @param object $attribute WP Term object of product attribute.
 		 */
-		public function if_add_term_column( $attribute ) {
+		public static function if_add_term_column( $attribute ) {
 			// Ensure the attribute name is in the correct taxonomy format.
 			$att_name = 'pa_' . $attribute->attribute_name;
 			$terms    = get_terms(
@@ -94,14 +96,12 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 			return ( 'color' === $type || 'image' === $type );
 		}
 
-
-
 		/**
 		 * Add swatch fields to new term page
 		 *
 		 * @param string $taxonomy attribute taxonomy name.
 		 */
-		public function new_term( $taxonomy ) {
+		public static function new_term( $taxonomy ) {
 			$atts = wc_get_attribute_taxonomies();
 
 			foreach ( $atts as $tax ) {
@@ -110,10 +110,10 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 
 				if ( $name === $taxonomy ) {
 					// display attribute types select dropdown.
-					$this->dispay_att_types( $tax->attribute_type );
+					self::dispay_att_types( $tax->attribute_type );
 
 					// display swatch input field.
-					$this->display_input( $tax->attribute_type );
+					self::display_input( $tax->attribute_type );
 
 					wp_nonce_field( 'svsw_save', 'svsw_nonce_field' );
 				}
@@ -129,7 +129,7 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 		 *
 		 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
 		 */
-		public function save_swatches( $term_id, $tt_id, $taxonomy ) {
+		public static function save_swatches( $term_id, $tt_id, $taxonomy ) {
 			if ( ! isset( $_POST['svsw_nonce_field'] ) ) {
 				return;
 			}
@@ -145,7 +145,7 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 			}
 
 			// save other custom input fields.
-			$this->save_inputs( $term_id );
+			self::save_inputs( $term_id );
 		}
 
 		/**
@@ -153,7 +153,7 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 		 *
 		 * @param int $term_id current term id being saved.
 		 */
-		public function save_inputs( $term_id ) {
+		public static function save_inputs( $term_id ) {
 			if ( ! isset( $_POST['svsw_nonce_field'] ) ) {
 				return;
 			}
@@ -198,12 +198,10 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 			}
 		}
 
-
-
 		/**
 		 * Add swatch to attribute type selection types
 		 */
-		public function add_att_type() {
+		public static function add_att_type() {
 			global $svsw__;
 
 			// if anything goes wrong, return this.
@@ -231,12 +229,12 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 		 * @param object $term     product attribute term object.
 		 * @param string $taxonomy taxonomy name we are adding.
 		 */
-		public function swatch_meta_box( $term, $taxonomy ) {
+		public static function swatch_meta_box( $term, $taxonomy ) {
 			// get attribute/term type.
 			$type = get_term_meta( $term->term_id, 'attribute_type', true );
 
 			// display attribute/term types select dropdown.
-			$this->dispay_att_types( $type );
+			self::dispay_att_types( $type );
 
 			$values = array(
 				'button'             => get_term_meta( $term->term_id, 'svsw_button', true ),
@@ -248,19 +246,17 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 			);
 
 			// display color here.
-			$this->display_input( $type, $values );
+			self::display_input( $type, $values );
 
 			wp_nonce_field( 'svsw_save', 'svsw_nonce_field' );
 		}
-
-
 
 		/**
 		 * Add new custom column to attribute list
 		 *
 		 * @param array $columns attribute term list header columns.
 		 */
-		public function term_list_header( $columns ) {
+		public static function term_list_header( $columns ) {
 			return array_merge(
 				array(
 					'cb'    => '',
@@ -277,7 +273,7 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 		 * @param string $column_name the column which is currently displaying.
 		 * @param int    $term_id     term id of the row.
 		 */
-		public function term_list_column( $content, $column_name, $term_id ) {
+		public static function term_list_column( $content, $column_name, $term_id ) {
 			$type  = '';
 			$value = '';
 			$html  = '';
@@ -304,14 +300,13 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 			return $content . $html;
 		}
 
-
-
 		/**
 		 * Display swatch attribute types dropdown
 		 *
 		 * @param string $att_type swatch attribute type.
 		 */
-		public function dispay_att_types( $att_type = '' ) {
+		public static function dispay_att_types( $att_type = '' ) {
+
 			// get all types.
 			$types = apply_filters( 'product_attributes_type_selector', array() );
 
@@ -339,7 +334,8 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 		 * @param string $type   swatch input field type.
 		 * @param array  $values input field saved value.
 		 */
-		public function display_input( $type, $values = array() ) {
+		public static function display_input( $type, $values = array() ) {
+
 			// get saved values - if any.
 			$button       = '';
 			$radio        = '';
@@ -381,7 +377,8 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 				</div>
 				<div class="form-field svsw-input-field svsw-input-color"<?php echo 'color' !== $type ? ' style="display: none;"' : ''; ?>>
 					<label for="tag-name">Color</label>
-					<input name="svsw_color" type="text" value="<?php echo esc_html( $color ); ?>" class="svsw-color-field" data-default-color="<?php echo esc_html( $color ); ?>">
+					<input name="svsw_color" type="text" class="svsw-colorpicker" value="<?php echo esc_html( $color ); ?>" data-default-color="">
+					<label for="tag-name">Tooltip</label>
 					<input name="svsw_color_tooltip" type="text" value="<?php echo esc_html( $colortooltip ); ?>" placeholder="Tooltip" class="admin-tooltip">
 				</div>
 				<div class="form-field svsw-input-field svsw-input-radio"<?php echo 'radio' !== $type ? ' style="display: none;"' : ''; ?>>
@@ -391,6 +388,7 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 				<div class="form-field svsw-input-field svsw-input-image"<?php echo 'image' !== $type ? ' style="display: none;"' : ''; ?>>
 					<input type="hidden" name="svsw_uploaded_image" class="svsw-uploaded-image regular-text" value="<?php echo esc_url( $image ); ?>">
 					<input type="button" name="svsw_upload_image" class="svsw-upload-image button-secondary" value="Upload Image">
+					<label for="tag-name">Tooltip</label>
 					<input name="svsw_image_tooltip" type="text" value="<?php echo esc_html( $imagetooltip ); ?>" placeholder="Tooltip" class="admin-tooltip">
 					<?php if ( ! empty( $image ) ) : ?>
 						<img src="<?php echo esc_url( $image ); ?>" class="svsw-admin-img">
@@ -403,5 +401,4 @@ if ( ! class_exists( 'SVSW_Admin_Swatch' ) ) {
 	}
 }
 
-$svsw_admin_swatch = new SVSW_Admin_Swatch();
-$svsw_admin_swatch->init();
+SVSW_Attribute_Editor::init();
