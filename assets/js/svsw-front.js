@@ -119,6 +119,7 @@
                 self.$state[attName] = '';
             });
             this.imposeStateOnEverything();
+            $(document).find('.svsw-reset').remove();
         }
         availableVariationsHandler(item){
             let availableVariations = {};
