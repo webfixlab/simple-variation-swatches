@@ -92,7 +92,7 @@
 
             setTimeout(() => {
                 this.availableVariationsHandler(item);
-            }, 1000);
+            }, 100);
         }
         updateState(item){ // update current state data.
             const attName = item.closest('.svsw-attr-wrap').attr('data-attribute_name');
