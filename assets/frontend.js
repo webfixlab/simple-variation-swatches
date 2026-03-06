@@ -102,7 +102,7 @@
 		$( 'body' ).find( '.svsw-tooltip' ).remove();
 
 		if ( item.hasClass( 'svsw-color-image' ) ) {
-			var tooltip = item.data( 'tooltip' ) ? ? '';
+			var tooltip = item.data( 'tooltip' ) ?? '';
 			var img     = item.data( 'img' ) || '';
 
 			var html = img.length ? '<img src="' + img + '">' : '';

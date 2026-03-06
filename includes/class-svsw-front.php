@@ -146,7 +146,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 					?>
 					</label>
 				<?php endif; ?>
-				<div class="svsw-attr-wrap" data-taxonomy="<?php echo esc_attr( sanitize_title( $attribute_name ) ); ?>">
+				<div class="svsw-attr-wrap" data-attribute_name="attribute_<?php echo esc_attr( sanitize_title( $attribute_name ) ); ?>">
 					<?php
 						// display swatches.
 					if ( is_wp_error( $terms ) ) {
@@ -244,7 +244,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 
 			if ( 'default' === $variation_to ) {
 				printf(
-					'<select name="%s" data-term="%s" class="svsw-swatch svsw-swatch-dropdown" style="%s">',
+					'<select name="%s" class="svsw-swatch svsw-swatch-dropdown" style="%s">',
 					esc_attr( $attribute_name ),
 					esc_attr( $attribute_name ),
 					esc_html( $font_size )
@@ -317,7 +317,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 				$value = 'background-color: ' . esc_attr( $value ) . ';';
 
 				printf(
-					'<span class="svsw-swatch svsw-color-image %s" style="%s width: %spx; height: %spx; border: %spx solid #ffffff" data-term="%s" data-tooltip="%s"></span>',
+					'<span class="svsw-swatch svsw-color-image %s" style="%s width: %spx; height: %spx; border: %spx solid #ffffff" data-attribute_value="%s" data-tooltip="%s"></span>',
 					esc_attr( $color_shape ),
 					esc_html( $value ),
 					esc_html( $color_size ),
@@ -337,7 +337,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 				}
 
 				printf(
-					'<span class="svsw-swatch svsw-color-image %s" style="background: url(%s) no-repeat; background-size: cover; width: %spx; height: %spx; border: %spx solid #ffffff;" data-term="%s" data-tooltip="%s" data-img="%s"></span>',
+					'<span class="svsw-swatch svsw-color-image %s" style="background: url(%s) no-repeat; background-size: cover; width: %spx; height: %spx; border: %spx solid #ffffff;" data-attribute_value="%s" data-tooltip="%s" data-img="%s"></span>',
 					esc_attr( $image_shape ),
 					esc_url( $value ),
 					esc_attr( $image_size ),
@@ -349,14 +349,14 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 				);
 			} elseif ( 'button' === $type ) {
 				printf(
-					'<span class="svsw-swatch svsw-btn" style="%s border: 1px solid;" data-term="%s">%s</span>',
+					'<span class="svsw-swatch svsw-btn" style="%s border: 1px solid;" data-attribute_value="%s">%s</span>',
 					esc_html( $font_size ),
 					esc_attr( $slug ),
 					esc_html( $value )
 				);
 			} elseif ( 'radio' === $type ) {
 				?>
-				<div class="svsw-swatch svsw-swatch-radio" data-term="<?php echo esc_attr( $slug ); ?>">
+				<div class="svsw-swatch svsw-swatch-radio" data-attribute_value="<?php echo esc_attr( $slug ); ?>">
 					<input type="radio" name="svsw_radio_swatch_<?php echo esc_attr( self::$taxonomy ); ?>" value="<?php echo esc_html( $slug ); ?>">
 					<label style="<?php echo esc_html( $font_size ); ?>"><?php echo esc_html( $value ); ?></label>
 				</div>
