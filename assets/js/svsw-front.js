@@ -39,12 +39,10 @@
                 const attName = $(this).attr('data-attribute_name');
                 self.$state[attName] = $(this).find('option:selected').val() ?? '';
             });
-            console.log('initial state', this.$state);
         }
         clearVariationsBtn(){
             let add = false; // add clear variations button or not.
             $.each(this.$state, function(attName, attValue){
-                console.log('name', attName, 'val', attValue);
                 if(attValue && attValue.length > 0) add = true;
             });
 
@@ -67,6 +65,8 @@
             const attName  = swatchWrap.attr('data-attribute_name');
             const attValue = this.$state[attName];
 
+            if('swatch' === type && !attValue) this.removeDisabledClass(swatchWrap);
+
             if('default' === type || swatchWrap.hasClass('svsw-swatch-dropdown')){ // select.
                 swatchWrap.val(attValue).trigger('change');
                 return;
@@ -83,9 +83,20 @@
                 }
             });
         }
+        removeDisabledClass(swatchWrap){
+            if(swatchWrap.hasClass('svsw-swatch-dropdown')){ // select.
+                swatchWrap.find('option').each(function(){
+                    $(this).removeClass('svsw-disabled');
+                });
+                return;
+            }
+
+            swatchWrap.find('.svsw-swatch').each(function(){
+                $(this).removeClass('svsw-disabled');
+            });
+        }
         swatchClickedEventHandler(item){ // swatch item click
             this.updateState(item);
-            console.log('state', this.$state);
 
             this.imposeStateOnEverything();
             this.clearVariationsBtn();

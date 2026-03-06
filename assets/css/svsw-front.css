@@ -198,7 +198,7 @@ label.attr-name.an-no-pad {
 .svsw-swatch.svsw-disabled::before {
 	content: '';
 	position: absolute;
-	top: 50%;
+	top: 48%;
 	left: 25%;
 	width: 50%;
 	height: 2px;
@@ -208,7 +208,7 @@ label.attr-name.an-no-pad {
 .svsw-swatch.svsw-disabled::after {
 	content: '';
 	position: absolute;
-	top: 50%;
+	top: 48%;
 	left: 25%;
 	width: 50%;
 	height: 2px;
