@@ -89,6 +89,10 @@
 
             this.imposeStateOnEverything();
             this.clearVariationsBtn();
+
+            setTimeout(() => {
+                this.availableVariationsHandler(item);
+            }, 1000);
         }
         updateState(item){ // update current state data.
             const attName = item.closest('.svsw-attr-wrap').attr('data-attribute_name');
@@ -104,6 +108,38 @@
                 self.$state[attName] = '';
             });
             this.imposeStateOnEverything();
+        }
+        availableVariationsHandler(item){
+            let availableVariations = {};
+            $(document).find('table.variations select').each(function(){
+                const attName = $(this).attr('data-attribute_name');
+                $(this).find('option').each(function(){
+                    const attValue = $(this).val();
+                    if(!availableVariations[attName]) availableVariations[attName] = [];
+                    if(attValue && attValue.length > 0) availableVariations[attName].push(attValue);
+                });
+            });
+            this.filterAvailableVariations(availableVariations);
+        }
+        filterAvailableVariations(availableVariations){
+            const self = this;
+            $(document).find('.svsw-frontend-wrap .svsw-attr-wrap').each(function(){
+                const attName = $(this).attr('data-attribute_name');
+                $(this).find('.svsw-swatch').each(function(){
+                    self.filterAvailableVariation(availableVariations[attName], $(this));
+                });
+            });
+        }
+        filterAvailableVariation(availableVariations, item){
+            if(item.hasClass('svsw-swatch-dropdown')){ // select.
+                item.find('option').each(function(){
+                    const attValue = $(this).val();
+                    $(this).toggleClass('svsw-disabled', -1 === availableVariations.indexOf(attValue)); // $(this).toggle(!!availableVariations);
+                });
+            }else{
+                const attValue = item.attr('data-attribute_value');
+                item.toggleClass('svsw-disabled', -1 === availableVariations.indexOf(attValue));
+            }
         }
     }
     new simpeVariationSwatches();
