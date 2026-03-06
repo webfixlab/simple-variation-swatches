@@ -9,9 +9,17 @@
 (function($, window, document){
     class simpeVariationSwatches{
         constructor(){
+            const self = this;
+
             this.$state = {}; // current variation attributes state.
             $(document).ready(() => {
                 this.initSwatchs();
+                $(document).on('mouseover', '.svsw-color-image', function(){
+                    self.toolTip($(this), false);
+                });
+                $(document).on('mouseleave', '.svsw-color-image', function(){
+                    self.toolTip($(this), true);
+                });
             });
         }
         initSwatchs(){
@@ -161,6 +169,16 @@
             const settings = svsw_front.settings.variation_behavior;
             if('disable' === settings)swatchItem.toggleClass('svsw-disabled', isDisabled);
             else swatchItem.toggle(!isDisabled);
+        }
+        toolTip(item, ifHide){
+            let toolTip = item.attr('data-tooltip');
+            const imgSrc = item.attr('data-img');
+
+            toolTip = imgSrc && imgSrc.length > 0 ? `<img src="${imgSrc}" />` : `<p>${toolTip}</p>`;
+            
+            const toolTipWrap = item.find('.svsw-tooltip');
+            if(ifHide) toolTipWrap.remove();
+            else if(!toolTipWrap || 0 === toolTipWrap.length) item.append(`<div class="svsw-tooltip">${toolTip}</div>`);
         }
     }
     new simpeVariationSwatches();
