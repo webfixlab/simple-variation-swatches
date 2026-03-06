@@ -84,15 +84,18 @@
             });
         }
         removeDisabledClass(swatchWrap){
+            const self = this;
             if(swatchWrap.hasClass('svsw-swatch-dropdown')){ // select.
                 swatchWrap.find('option').each(function(){
-                    $(this).removeClass('svsw-disabled');
+                    // $(this).removeClass('svsw-disabled');
+                    self.hideOrDisableSwatch($(this), false);
                 });
                 return;
             }
 
             swatchWrap.find('.svsw-swatch').each(function(){
-                $(this).removeClass('svsw-disabled');
+                // $(this).removeClass('svsw-disabled');
+                self.hideOrDisableSwatch($(this), false);
             });
         }
         swatchClickedEventHandler(item){ // swatch item click
@@ -143,15 +146,21 @@
             });
         }
         filterAvailableVariation(availableVariations, item){
+            const self = this;
             if(item.hasClass('svsw-swatch-dropdown')){ // select.
                 item.find('option').each(function(){
                     const attValue = $(this).val();
-                    $(this).toggleClass('svsw-disabled', -1 === availableVariations.indexOf(attValue)); // $(this).toggle(!!availableVariations);
+                    self.hideOrDisableSwatch($(this), -1 === availableVariations.indexOf(attValue));
                 });
             }else{
                 const attValue = item.attr('data-attribute_value');
-                item.toggleClass('svsw-disabled', -1 === availableVariations.indexOf(attValue));
+                self.hideOrDisableSwatch(item, -1 === availableVariations.indexOf(attValue));
             }
+        }
+        hideOrDisableSwatch(swatchItem, isDisabled){
+            const settings = svsw_front.settings.variation_behavior;
+            if('disable' === settings)swatchItem.toggleClass('svsw-disabled', isDisabled);
+            else swatchItem.toggle(!isDisabled);
         }
     }
     new simpeVariationSwatches();
