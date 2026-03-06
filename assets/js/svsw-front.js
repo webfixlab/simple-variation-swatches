@@ -20,7 +20,9 @@
             $(document).on('click change', '.svsw-swatch', function(){
                 self.swatchClickedEventHandler($(this));
             });
-            // reset variation handler.
+            $(document).on('click', '.svsw-reset', () => {
+                this.clearVariations();
+            });
         }
         initialStateHandler(){
             this.getState();
@@ -97,8 +99,9 @@
             this.imposeStateOnSwatches($(document).find('table.variations select'), 'default');
         }
         clearVariations(){
+            const self = this;
             $.each(this.$state, function(attName, attValue){ // clear state values.
-                this.$state[attName] = '';
+                self.$state[attName] = '';
             });
             this.imposeStateOnEverything();
         }
