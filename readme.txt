@@ -80,3 +80,8 @@ Yes, just send your [request here](https://webfixlab.com/contact/).
 **Simple Variation Swatches**
 
 * Fix - Swatches only hiding but not disabling.
+* Update - Default variation attribute value handler.
+* Update - Complete frontend JS.
+* Update - New file structure added.
+* Update - Frontend tooltip CSS.
+* Update - Disabled swatch CSS.

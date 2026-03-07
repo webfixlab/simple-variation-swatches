@@ -24,9 +24,10 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 			add_action( 'add_tag_form_fields', array( __CLASS__, 'new_term' ), 20, 1 );
 
 			add_action( 'create_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
+			add_action( 'edit_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
+
 			add_action( 'created_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
 			add_action( 'edited_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
-			add_action( 'edit_term', array( __CLASS__, 'save_swatches' ), 10, 3 );
 		}
 
 		/**
@@ -41,23 +42,32 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 
 			// add custom hook to support our plugin stuff here.
 			foreach ( $atts as $tax ) {
-				// edit term input fields, display.
-				$name = wc_attribute_taxonomy_name( $tax->attribute_name );
-
-				// add custom field to attribute edit form.
-				add_action( 'pa_' . $tax->attribute_name . '_edit_form', array( __CLASS__, 'swatch_meta_box' ), 20, 2 );
-
-				// custom column - for color and image type attribute only.
-				if ( self::if_add_term_column( $tax ) ) {
-
-					// add content to custom column created.
-					add_filter( 'manage_' . $name . '_custom_column', array( __CLASS__, 'term_list_column' ), 10, 3 );
-
-					// add new custom column to attribute list.
-					add_filter( 'manage_edit-' . $name . '_columns', array( __CLASS__, 'term_list_header' ), 20, 1 );
-
-				}
+				self::init_attribute_swatch( $tax );
 			}
+		}
+
+		/**
+		 * Init hooks for given attribute
+		 *
+		 * @param object $att_tax attribute taxonomy.
+		 */
+		public static function init_attribute_swatch( $att_tax ){
+			// edit term input fields, display.
+			$name = wc_attribute_taxonomy_name( $att_tax->attribute_name );
+
+			// add custom field to attribute edit form.
+			add_action( 'pa_' . $att_tax->attribute_name . '_edit_form', array( __CLASS__, 'swatch_meta_box' ), 20, 2 );
+
+			// custom column - for color and image type attribute only.
+			if ( ! self::if_add_term_column( $att_tax ) ) {
+				return;				
+			}
+
+			// add content to custom column created.
+			add_filter( 'manage_' . $name . '_custom_column', array( __CLASS__, 'list_attribute_details' ), 10, 3 );
+
+			// add new custom column to attribute list.
+			add_filter( 'manage_edit-' . $name . '_columns', array( __CLASS__, 'term_list_header' ), 20, 1 );
 		}
 
 		/**
@@ -68,7 +78,8 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		public static function if_add_term_column( $attribute ) {
 			// Ensure the attribute name is in the correct taxonomy format.
 			$att_name = 'pa_' . $attribute->attribute_name;
-			$terms    = get_terms(
+			
+			$terms = get_terms(
 				array(
 					'taxonomy'   => $att_name,
 					'hide_empty' => false,
@@ -82,20 +93,20 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 
 			foreach ( $terms as $term ) {
 				$type = get_term_meta( $term->term_id, 'attribute_type', true );
+				if ( empty( $type ) ) {
+					continue;
+				}
 
-				if ( ! empty( $type ) ) {
-					$value = get_term_meta( $term->term_id, 'svsw_' . $type, true );
-
-					if ( ! empty( $value ) && ( 'color' === $type || 'image' === $type ) ) {
-						return true;
-					}
+				$value = get_term_meta( $term->term_id, 'svsw_' . $type, true );
+				if ( ! empty( $value ) && ( 'color' === $type || 'image' === $type ) ) {
+					return true;
 				}
 			}
 
 			// Check parent attribute's type if no term matched.
 			$type = isset( $attribute->attribute_type ) ? $attribute->attribute_type : '';
 
-			return ( 'color' === $type || 'image' === $type );
+			return 'color' === $type || 'image' === $type;
 		}
 
 		/**
@@ -107,18 +118,17 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 			$atts = wc_get_attribute_taxonomies();
 
 			foreach ( $atts as $tax ) {
-				// get attribute name.
-				$name = wc_attribute_taxonomy_name( $tax->attribute_name );
-
-				if ( $name === $taxonomy ) {
-					// display attribute types select dropdown.
-					self::dispay_att_types( $tax->attribute_type );
-
-					// display swatch input field.
-					self::display_input( $tax->attribute_type );
-
-					wp_nonce_field( 'svsw_save', 'svsw_nonce_field' );
+				if( $taxonomy !== wc_attribute_taxonomy_name( $tax->attribute_name ) ){
+					continue;
 				}
+
+				// display attribute types select dropdown.
+				self::dispay_att_types( $tax->attribute_type );
+
+				// display swatch input field.
+				self::display_input( $tax->attribute_type );
+
+				wp_nonce_field( 'svsw_save', 'svsw_nonce_field' );
 			}
 		}
 
@@ -164,39 +174,15 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 				return;
 			}
 
-			// color field.
-			if ( isset( $_POST['svsw_color'] ) ) {
-				$color = sanitize_text_field( wp_unslash( $_POST['svsw_color'] ) );
-				update_term_meta( $term_id, 'svsw_color', $color );
-			}
+			$fields = array( 'svsw_color', 'svsw_button', 'svsw_radio', 'svsw_uploaded_image', 'svsw_color_tooltip', 'svsw_image_tooltip' );
 
-			// button field.
-			if ( isset( $_POST['svsw_button'] ) ) {
-				$button = sanitize_text_field( wp_unslash( $_POST['svsw_button'] ) );
-				update_term_meta( $term_id, 'svsw_button', $button );
-			}
+			foreach( $fields as $field ){
+				if( ! isset( $_POST[ $field ] ) ){
+					continue;
+				}
 
-			// radio button field.
-			if ( isset( $_POST['svsw_radio'] ) ) {
-				$radio = sanitize_text_field( wp_unslash( $_POST['svsw_radio'] ) );
-				update_term_meta( $term_id, 'svsw_radio', $radio );
-			}
-
-			// handle uploaded image url.
-			if ( isset( $_POST['svsw_uploaded_image'] ) ) {
-				update_term_meta( $term_id, 'svsw_image', sanitize_url( wp_unslash( $_POST['svsw_uploaded_image'] ) ) );
-			}
-
-			// color field tooltip.
-			if ( isset( $_POST['svsw_color_tooltip'] ) ) {
-				$color_tooltip = sanitize_text_field( wp_unslash( $_POST['svsw_color_tooltip'] ) );
-				update_term_meta( $term_id, 'svsw_color_tooltip', $color_tooltip );
-			}
-
-			// image field tooltip.
-			if ( isset( $_POST['svsw_image_tooltip'] ) ) {
-				$image_tooltip = sanitize_text_field( wp_unslash( $_POST['svsw_image_tooltip'] ) );
-				update_term_meta( $term_id, 'svsw_image_tooltip', $image_tooltip );
+				$value = 'svsw_image' === $field ? sanitize_url( wp_unslash( $_POST[ $field ] ) ) : sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
+				update_term_meta( $term_id, $field, $value );
 			}
 		}
 
@@ -212,7 +198,6 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 			);
 
 			$screen = get_current_screen();
-
 			if ( empty( $screen ) ) {
 				return $blank;
 			}
@@ -238,14 +223,12 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 			// display attribute/term types select dropdown.
 			self::dispay_att_types( $type );
 
-			$values = array(
-				'button'             => get_term_meta( $term->term_id, 'svsw_button', true ),
-				'color'              => get_term_meta( $term->term_id, 'svsw_color', true ),
-				'svsw_color_tooltip' => get_term_meta( $term->term_id, 'svsw_color_tooltip', true ),
-				'radio'              => get_term_meta( $term->term_id, 'svsw_radio', true ),
-				'image'              => get_term_meta( $term->term_id, 'svsw_image', true ),
-				'svsw_image_tooltip' => get_term_meta( $term->term_id, 'svsw_image_tooltip', true ),
-			);
+			$fields = array( 'svsw_color', 'svsw_button', 'svsw_radio', 'svsw_uploaded_image', 'svsw_color_tooltip', 'svsw_image_tooltip' );
+			
+			$values = array();
+			foreach( $fields as $field ){
+				$values[ $field ] = get_term_meta( $term->term_id, $field, true );
+			}
 
 			// display color here.
 			self::display_input( $type, $values );
@@ -275,10 +258,9 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		 * @param string $column_name the column which is currently displaying.
 		 * @param int    $term_id     term id of the row.
 		 */
-		public static function term_list_column( $content, $column_name, $term_id ) {
+		public static function list_attribute_details( $content, $column_name, $term_id ) {
 			$type  = '';
 			$value = '';
-			$html  = '';
 
 			// get attribute type and respective input field value.
 			$type = get_term_meta( $term_id, 'attribute_type', true );
@@ -286,20 +268,16 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 				$value = get_term_meta( $term_id, 'svsw_' . $type, true );
 			}
 
-			if ( ! empty( $value ) ) {
-				// color or image field html.
-				$html = '<div class="svsw-value">';
-
-				if ( 'color' === $type ) {
-					$html .= '<div style="background-color: ' . esc_html( $value ) . ';"></div>';
-				} elseif ( 'image' === $type ) {
-					$html .= '<div style="background: url(' . esc_url( $value ) . ') no-repeat; background-size: cover;"></div>';
-				}
-
-				$html .= '</div>';
+			if( empty( $value ) || ! in_array( $type, array( 'color', 'image', true ) ) ){
+				return $content;
 			}
 
-			return $content . $html;
+			$content .= sprintf(
+				'<div class="svsw-value"><div style="%s;"></div></div>',
+				'color' === $type ? 'background-color: ' . esc_html( $value ) : 'background: url(' . esc_url( $value ) . ') no-repeat; background-size: cover'
+			);
+
+			return $content;
 		}
 
 		/**
@@ -308,7 +286,6 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		 * @param string $att_type swatch attribute type.
 		 */
 		public static function dispay_att_types( $att_type = '' ) {
-
 			// get all types.
 			$types = apply_filters( 'product_attributes_type_selector', array() );
 
@@ -337,66 +314,87 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		 * @param array  $values input field saved value.
 		 */
 		public static function display_input( $type, $values = array() ) {
-
-			// get saved values - if any.
-			$button       = '';
-			$radio        = '';
-			$color        = '';
-			$colortooltip = '';
-			$image        = '';
-			$imagetooltip = '';
-
-			if ( isset( $values ) ) {
-				if ( isset( $values['button'] ) ) {
-					$button = $values['button'];
-				}
-				if ( isset( $values['radio'] ) ) {
-					$radio = $values['radio'];
-				}
-				if ( isset( $values['color'] ) ) {
-					$color = $values['color'];
-				}
-				if ( isset( $values['image'] ) ) {
-					$image = $values['image'];
-				}
-				if ( isset( $values['svsw_color_tooltip'] ) ) {
-					$colortooltip = $values['svsw_color_tooltip'];
-				}
-				if ( isset( $values['svsw_image_tooltip'] ) ) {
-					$imagetooltip = $values['svsw_image_tooltip'];
-				}
-			}
-
-			// set default values.
-			if ( empty( $color ) ) {
-				$color = '#effeff';
-			}
 			?>
 			<div class="svsw-edit-tag-wrap" data-type="<?php echo esc_attr( $type ); ?>">
-				<div class="form-field svsw-input-field svsw-input-button"<?php echo 'button' !== $type ? ' style="display: none;"' : ''; ?>>
-					<label for="tag-name">Label</label>
-					<input name="svsw_button" type="text" value="<?php echo esc_html( $button ); ?>">
-				</div>
-				<div class="form-field svsw-input-field svsw-input-color"<?php echo 'color' !== $type ? ' style="display: none;"' : ''; ?>>
-					<label for="tag-name">Color</label>
-					<input name="svsw_color" type="text" class="svsw-colorpicker" value="<?php echo esc_html( $color ); ?>" data-default-color="">
-					<label for="tag-name">Tooltip</label>
-					<input name="svsw_color_tooltip" type="text" value="<?php echo esc_html( $colortooltip ); ?>" placeholder="Tooltip" class="admin-tooltip">
-				</div>
-				<div class="form-field svsw-input-field svsw-input-radio"<?php echo 'radio' !== $type ? ' style="display: none;"' : ''; ?>>
-					<label for="tag-name">Label</label>
-					<input name="svsw_radio" type="text" value="<?php echo esc_html( $radio ); ?>">
-				</div>
-				<div class="form-field svsw-input-field svsw-input-image"<?php echo 'image' !== $type ? ' style="display: none;"' : ''; ?>>
-					<input type="hidden" name="svsw_uploaded_image" class="svsw-uploaded-image regular-text" value="<?php echo esc_url( $image ); ?>">
-					<input type="button" name="svsw_upload_image" class="svsw-upload-image button-secondary" value="Upload Image">
-					<label for="tag-name">Tooltip</label>
-					<input name="svsw_image_tooltip" type="text" value="<?php echo esc_html( $imagetooltip ); ?>" placeholder="Tooltip" class="admin-tooltip">
-					<?php if ( ! empty( $image ) ) : ?>
-						<img src="<?php echo esc_url( $image ); ?>" class="svsw-admin-img">
-						<span class="dashicons dashicons-remove svsw-remove-img"></span>
-					<?php endif; ?>
-				</div>
+				<?php self::render_button( $values, $type ); ?>
+				<?php self::render_color( $values, $type ); ?>
+				<?php self::render_radio_button( $values, $type ); ?>
+				<?php self::render_image( $values, $type ); ?>
+			</div>
+			<?php
+		}
+
+		/**
+		 * Display button field options
+		 *
+		 * @param array  $values saved values.
+		 * @param string $type   which swatch field should we display.
+		 */
+		private static function render_button( $values, $type ){
+			$value = $values['svsw_button'] ?? '';
+			?>
+			<div class="form-field svsw-input-field svsw-input-button"<?php echo 'button' !== $type ? ' style="display: none;"' : ''; ?>>
+				<label for="tag-name">Label</label>
+				<input name="svsw_button" type="text" value="<?php echo esc_html( $value ); ?>">
+			</div>
+			<?php
+		}
+
+		/**
+		 * Display color field options
+		 *
+		 * @param array  $values saved values.
+		 * @param string $type   which swatch field should we display.
+		 */
+		private static function render_color( $values, $type ){
+			$value   = $values['svsw_color'] ?? '';
+			$value   = empty( $value ) ? '#effeff' : $value;
+			$tooltip = $values['svsw_color_tooltip'] ?? '';
+			?>
+			<div class="form-field svsw-input-field svsw-input-color"<?php echo 'color' !== $type ? ' style="display: none;"' : ''; ?>>
+				<label for="tag-name">Color</label>
+				<input name="svsw_color" type="text" class="svsw-colorpicker" value="<?php echo esc_html( $value ); ?>" data-default-color="">
+				<label for="tag-name">Tooltip</label>
+				<input name="svsw_color_tooltip" type="text" value="<?php echo esc_html( $tooltip ); ?>" placeholder="Tooltip" class="admin-tooltip">
+			</div>
+			<?php
+		}
+
+		/**
+		 * Display radio button field options
+		 *
+		 * @param array  $values saved values.
+		 * @param string $type   which swatch field should we display.
+		 */
+		private static function render_radio_button( $values, $type ){
+			$value   = $values['svsw_radio'] ?? '';
+			?>
+			<div class="form-field svsw-input-field svsw-input-radio"<?php echo 'radio' !== $type ? ' style="display: none;"' : ''; ?>>
+				<label for="tag-name">Label</label>
+				<input name="svsw_radio" type="text" value="<?php echo esc_html( $value ); ?>">
+			</div>
+			<?php
+		}
+
+		/**
+		 * Display image field options
+		 *
+		 * @param array  $values saved values.
+		 * @param string $type   which swatch field should we display.
+		 */
+		private static function render_image( $values, $type ){
+			$value   = $values['svsw_image'] ?? '';
+			$tooltip = $values['svsw_image_tooltip'] ?? '';
+			?>
+			<div class="form-field svsw-input-field svsw-input-image"<?php echo 'image' !== $type ? ' style="display: none;"' : ''; ?>>
+				<input type="hidden" name="svsw_uploaded_image" class="svsw-uploaded-image regular-text" value="<?php echo esc_url( $value ); ?>">
+				<input type="button" name="svsw_upload_image" class="svsw-upload-image button-secondary" value="Upload Image">
+				<label for="tag-name">Tooltip</label>
+				<input name="svsw_image_tooltip" type="text" value="<?php echo esc_html( $tooltip ); ?>" placeholder="Tooltip" class="admin-tooltip">
+				<?php if ( ! empty( $value ) ) : ?>
+					<img src="<?php echo esc_url( $value ); ?>" class="svsw-admin-img">
+					<span class="dashicons dashicons-remove svsw-remove-img"></span>
+				<?php endif; ?>
 			</div>
 			<?php
 		}
