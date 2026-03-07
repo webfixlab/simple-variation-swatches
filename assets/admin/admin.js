@@ -1,8 +1,6 @@
 /**
  * Admin settings page function
  *
- * @uses svsw_admin_data Admin localized data
- *
  * @package    WordPress
  * @subpackage Simple Variation Swatches
  * @since      3.0.0
@@ -16,68 +14,33 @@
             });
         }
 		initEventTriggers(){
-			const self = this;
-
-			$('.svsw-colorpicker').wpColorPicker();
-
-			$(window).on('scroll', () => { // sticky header/menu.
+			$('.svsw-colorpicker').wpColorPicker(); // color swatches.
+			
+			$(window).on('scroll', () => { // sticky header.
 				this.stickyTopBar();
 			});
-
-			$(document).on('click', '.notice.is-dismissible', function(){
-				$(this).hide('slow').remove();
-			});
-
-			// handle settings nav.
-			$('.nav-tab').on('click', function(){
-				self.navigationTabsHandler($(this));
-			});
-
-			// when this is changed, load color picker.
-			$('#variable_product_options').on('change', function(){
-				$('.svsw-color-field').wpColorPicker();
-			});
-
-			$('body').on('change', '.svsw-type', function(){
-				self.showTargetDiv($(this));
-			});
 			
-			$('body').on('change', 'select[name="attribute_type"]', function(){
-				self.isRequiredField($(this));
+			$('.nav-tab').on('click', (e) => { // option page tab navigation.
+				this.navigationTabsHandler($(e.currentTarge));
 			});
 
-			// media uploader.
-			$('.svsw-upload-image').on('click', function(e){
+			$(document).on('change', '.svsw-att-type', () => { // load input on attribute type changed.
+				this.displayAttTypeInputFeild();
+			});
+
+			$(document).on('click', '.svsw-upload-image', (e) => { // media uploader.
 				e.preventDefault();
-				self.setSwatchImage($(this));
+				this.setSwatchImage();
 			});
 
-			// image undo button clicked event.
-			$('body').on('click', '.svsw-remove-img', function(e){
+			$(document).on('click', '.svsw-remove-img', (e) => { // on remove swatch image.
 				if(confirm(svsw_admin_data.img_delete)){
-					self.removeImage($(this));
+					this.removeImage();
 				}
 			});
-
-
-
-
-			var type = $('.svsw-att-type option:selected').val();
-
-			// for button and radio type swatch - make it required.
-			if(type == 'radio' || type == 'button'){
-				$('.svsw-input-' + type + ' input').attr('required', true);
-			}
-
-			this.add_enctype();
 		}
 		stickyTopBar(){
 			$(document).find('.svsw-wrap').toggleClass('svsw-sticky-top', $(window).scrollTop() > 40);
-			// if($(window).scrollTop() > 40){
-			// 	$('.svsw-wrap').addClass('svsw-sticky-top');
-			// }else if($('.svsw-wrap').hasClass('svsw-sticky-top')){
-			// 	$('.svsw-wrap').removeClass('svsw-sticky-top');
-			// }
 		}
 		navigationTabsHandler(item){
 			if(item.hasClass('nav-tab-active')) return;
@@ -90,102 +53,42 @@
 			$(`.svsw-${target}`).show();
 			$('input[name="svsw_tab"]').val(target); // for keeping the tab open on save.
 		}
-		showTargetDiv(item){
-			const type = item.val();
+		displayAttTypeInputFeild(){
+			const swatchType = $(document).find('.svsw-att-type option:selected').val();
+			if(!swatchType || 0 === swatchType.length) return;
 
-			$('.svsw-input').hide();
-
-			const targetDiv = $(document).find(`.svsw-${type}`)
-			if(targetDiv && targetDiv.length > 0) targetDiv.show();
-		}
-		isRequiredField(item){
-			const swatchType = item.val();
+			// hide all input fields except current one.
 			$('.svsw-input-field').hide();
-			$('.svsw-input-' + swatchType).show();
-
-			// remove all input fields required property.
-			$('.svsw-input-field input').removeAttr('required');
-
-			// for button and radio type swatch - make it required.
-			if(swatchType == 'radio' || swatchType == 'button'){
-				$('.svsw-input-' + swatchType + ' input').attr('required', true);
-			}
+			$(`.svsw-input-${swatchType}`).show();
 		}
-		setSwatchImage(item){
-			const self = this;
-			
+		setSwatchImage(){
 			const mediaObj = wp.media({
 				title    : 'Upload Image',
 				multiple : false
 			})
 			.open()
-			.on('select', function(e){
-				const imageObj = mediaObj.state().get('selection').first(); // because we set multiple false.
-				const imageUrl = imageObj.toJSON().url;
-				console.log('media', mediaObj, 'img', imageObj.toJSON());
-
-				self.attachImageToSwatch(item, imageUrl);
+			.on('select', (e) => {
+				this.attachImageToSwatch(mediaObj.state().get('selection').first()); // get only first media item.
 			});
 		}
-		attachImageToSwatch(item, imageUrl){
-			if(!imageUrl.length) return;
+		attachImageToSwatch(imageObj){
+			const imageData = imageObj.toJSON();
+			console.log('url', imageData.url, 'id', imageData.id);
 
-			const imageSwatchWrap = item.closest('.svsw-input-image');
-			const imageWrap = imageSwatchWrap.find('img');
+			if(!imageData.url.length) return;
 
-			if(imageWrap && imageWrap.length > 0) imageWrap.attr('src', imageUrl);
-			else imageSwatchWrap.append(`<img src="'${imageUrl}" class="svsw-admin-img"><span class="dashicons dashicons-remove svsw-remove-img"></span>`);
+			const imageWrap = $(document).find('.svsw-input-image img');
+			if(imageWrap && imageWrap.length > 0) imageWrap.attr('src', imageData.url);
+			else $(document).find('.svsw-input-image').append(`<img src="${imageData.url}" class="svsw-admin-img"><span class="dashicons dashicons-remove svsw-remove-img"></span>`);
 			
-			this.setImageInputValue(imageUrl);
+			this.setImageInputValue(imageData.url);
 		}
 		setImageInputValue(imageUrl){
-			$('.svsw-uploaded-image').val(imageUrl);
+			$(document).find('input[name="svsw_image"]').val(imageUrl);
 		}
-		removeImage(imageSwatchWrap){
-			const imageWrap = imageSwatchWrap.closest('.svsw-input-image').find('img');
-			imageWrap.hide('slow', function(){
-				imageWrap.remove();
-			});
-
-			imageSwatchWrap.remove();
-			
-		}
-
-
-
-		// handle file uploading pre processing on load.
-		add_enctype(){
-			// check if document has our image uploading input field.
-			var has_input = false;
-			var input     = $('body').find('input[name="svsw_image"]');
-			if(typeof input != 'undefined' && input.length > 0){
-				has_input = true;
-			}
-			if(has_input == false){
-				return;
-			}
-
-			// check it's wrapping form, if it has enctype attribute | enctype="multipart/form-data".
-			var has_form = false;
-			var form     = input.closest('form');
-			if(typeof form != 'undefined' && form.length > 0){
-				has_form = true;
-			}
-			if(has_form == false){
-				return;
-			}
-
-			// check if has form attribute.
-			var has_attr = false;
-			var attr     = form.attr('enctype');
-			if(typeof attr != 'undefined' && attr !== false){
-				has_attr = true;
-			}
-
-			// if no attribute found, add that.
-			if(has_attr == false){
-				form.attr('enctype', 'multipart/form-data');
-			}
+		removeImage(){
+			this.setImageInputValue('');
+			$(document).find('.svsw-input-image img').remove();
 		}
     }
     new SimpleVariationSwatchsAdmin();
