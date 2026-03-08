@@ -84,7 +84,7 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 				</nav>
 			</div>
 			<div class="svsw-sections">
-				<div class="section svsw-general"<?php echo 'general' !== $tab ? ' style="display: none;"' : ''; ?>>
+				<div class="svsw-section svsw-section-general"<?php echo 'general' !== $tab ? ' style="display: none;"' : ''; ?>>
 					<h3><?php echo esc_html__( 'General settings', 'simple-variation-swatches' ); ?></h3>
 					<table class="form-table">
 						<tr valign="top">
@@ -113,7 +113,7 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 						</tr>
 					</table>
 				</div>
-				<div class="section svsw-appearance"<?php echo 'appearance' !== $tab ? ' style="display: none;"' : ''; ?>>
+				<div class="svsw-section svsw-section-appearance"<?php echo 'appearance' !== $tab ? ' style="display: none;"' : ''; ?>>
 					<h3><?php echo esc_html__( 'Appearance', 'simple-variation-swatches' ); ?></h3>
 					<table class="form-table">
 						<tr valign="top">

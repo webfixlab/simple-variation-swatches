@@ -9,57 +9,42 @@
 (function($, window, document){
     class SimpleVariationSwatchsAdmin{
         constructor(){
-            $(document).ready(() => {
-                this.initEventTriggers();
-            });
+			$(() => this.initEventTriggers());
         }
 		initEventTriggers(){
+			$(window).on('scroll', () => this.stickyTopBar()); // sticky header.
 			$('.svsw-colorpicker').wpColorPicker(); // color swatches.
-			
-			$(window).on('scroll', () => { // sticky header.
-				this.stickyTopBar();
-			});
-			
-			$('.nav-tab').on('click', (e) => { // option page tab navigation.
-				this.navigationTabsHandler($(e.currentTarge));
-			});
 
-			$(document).on('change', '.svsw-att-type', () => { // load input on attribute type changed.
-				this.displayAttTypeInputFeild();
-			});
-
-			$(document).on('click', '.svsw-upload-image', (e) => { // media uploader.
+			const $doc = $(document);
+			$doc.on('click', '.nav-tab', e => this.settingsPageTabHandler($(e.currentTarget))); // navigation tab.
+			$doc.on('change', '.svsw-att-type', () => this.displayAttTypeInputFeild()); // load input on attribute type changed.
+			$doc.on('click', '.svsw-upload-image', (e) => { // media uploader.
 				e.preventDefault();
 				this.setSwatchImage();
 			});
-
-			$(document).on('click', '.svsw-remove-img', (e) => { // on remove swatch image.
-				if(confirm(svsw_admin_data.img_delete)){
-					this.removeImage();
-				}
-			});
+			$doc.on('click', '.svsw-remove-img', e => confirm(svsw_admin_data.img_delete) && this.removeImage()); // on remove swatch image.
 		}
 		stickyTopBar(){
 			$(document).find('.svsw-wrap').toggleClass('svsw-sticky-top', $(window).scrollTop() > 40);
 		}
-		navigationTabsHandler(item){
+		settingsPageTabHandler(item){
 			if(item.hasClass('nav-tab-active')) return;
 
-			$('.nav-tab').removeClass('nav-tab-active');
+			$(document).find('.nav-tab').removeClass('nav-tab-active');
 			item.addClass('nav-tab-active');
 
+			$('.svsw-section').hide();
 			const target = item.data('target');
-			$('.section').hide();
-			$(`.svsw-${target}`).show();
-			$('input[name="svsw_tab"]').val(target); // for keeping the tab open on save.
+			$(document).find(`.svsw-section-${target}`).show();
+			$(document).find('input[name="svsw_tab"]').val(target); // for keeping the tab open on save.
 		}
 		displayAttTypeInputFeild(){
 			const swatchType = $(document).find('.svsw-att-type option:selected').val();
 			if(!swatchType || 0 === swatchType.length) return;
 
 			// hide all input fields except current one.
-			$('.svsw-input-field').hide();
-			$(`.svsw-input-${swatchType}`).show();
+			$(document).find('.svsw-input-field').hide();
+			$(document).find(`.svsw-input-${swatchType}`).show();
 		}
 		setSwatchImage(){
 			const mediaObj = wp.media({
@@ -67,9 +52,7 @@
 				multiple : false
 			})
 			.open()
-			.on('select', (e) => {
-				this.attachImageToSwatch(mediaObj.state().get('selection').first()); // get only first media item.
-			});
+			.on('select', e => this.attachImageToSwatch(mediaObj.state().get('selection').first()));
 		}
 		attachImageToSwatch(imageObj){
 			const imageData = imageObj.toJSON();

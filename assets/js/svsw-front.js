@@ -9,28 +9,16 @@
 (function($, window, document){
     class simpeVariationSwatches{
         constructor(){
-            const self = this;
-
             this.$state = {}; // current variation attributes state.
-            $(document).ready(() => {
+            $(() => {
                 this.initSwatchs();
-                $(document).on('mouseover', '.svsw-color-image', function(){
-                    self.toolTip($(this), false);
-                });
-                $(document).on('mouseleave', '.svsw-color-image', function(){
-                    self.toolTip($(this), true);
-                });
+                $(document).on('mouseenter mouseleave', '.svsw-color-image', e => this.toolTip($(e.currentTarget), e.type === 'mouseleave'));
             });
         }
         initSwatchs(){
-            const self = this;
             this.initialStateHandler();
-            $(document).on('click change', '.svsw-swatch', function(){
-                self.swatchClickedEventHandler($(this));
-            });
-            $(document).on('click', '.svsw-reset', () => {
-                this.clearVariations();
-            });
+            $(document).on('click change', '.svsw-swatch', e => this.swatchClickedEventHandler($(e.currentTarget)));
+            $(document).on('click', '.svsw-reset', () => this.clearVariations());
         }
         initialStateHandler(){
             this.getState();
@@ -39,14 +27,11 @@
             this.clearVariationsBtn();
         }
         getState(){ // get initial attribute -> 
-            const self = this;
             const atts = $(document).find('table.variations select');
             if(!atts || 0 === atts.length) return;
 
-            atts.each(function(){
-                const attName = $(this).attr('data-attribute_name');
-                self.$state[attName] = $(this).find('option:selected').val() ?? '';
-            });
+            // Respecting default attribute values.
+            atts.each((_, el) => this.$state[$(el).attr('data-attribute_name')] = $(el).find('option:selected').val() ?? '');
         }
         clearVariationsBtn(){
             let add = false; // add clear variations button or not.
@@ -57,17 +42,12 @@
             const resetWrap = $(document).find('.svsw-reset');
             if(add && resetWrap && resetWrap.length > 0) return;
 
-            if(add){
-                $(document).find('.svsw-frontend-wrap').append('<a class="svsw-reset reset_variations" href="#" style="visibility: visible;">Clear</a>');
-            }else{
-                resetWrap.remove();
-            }
+            // add clear variation button or remove it, based on flag.
+            if(add) $(document).find('.svsw-frontend-wrap').append('<a class="svsw-reset reset_variations" href="#" style="visibility: visible;">Clear</a>');
+            else resetWrap.remove();
         }
         imposeStateOnSwatches(items, type){
-            const self = this;
-            items.each(function(){
-                self.imposeStateOnSwatch($(this), type);
-            });
+            items.each(e => this.imposeStateOnSwatch($(e.currentTarget), type));
         }
         imposeStateOnSwatch(swatchWrap, type){
             const attName  = swatchWrap.attr('data-attribute_name');
@@ -92,19 +72,12 @@
             });
         }
         removeDisabledClass(swatchWrap){
-            const self = this;
             if(swatchWrap.hasClass('svsw-swatch-dropdown')){ // select.
-                swatchWrap.find('option').each(function(){
-                    // $(this).removeClass('svsw-disabled');
-                    self.hideOrDisableSwatch($(this), false);
-                });
+                swatchWrap.find('option').each(e => this.hideOrDisableSwatch($(e.currentTarget), false));
                 return;
             }
 
-            swatchWrap.find('.svsw-swatch').each(function(){
-                // $(this).removeClass('svsw-disabled');
-                self.hideOrDisableSwatch($(this), false);
-            });
+            swatchWrap.find('.svsw-swatch').each(e => this.hideOrDisableSwatch($(e.currentTarget), false));
         }
         swatchClickedEventHandler(item){ // swatch item click
             this.updateState(item);
@@ -125,10 +98,9 @@
             this.imposeStateOnSwatches($(document).find('table.variations select'), 'default');
         }
         clearVariations(){
-            const self = this;
-            $.each(this.$state, function(attName, attValue){ // clear state values.
-                self.$state[attName] = '';
-            });
+            // clear state values.
+            Object.keys(this.$state).forEach(key => this.$state[key] = '');
+            
             this.imposeStateOnEverything();
             $(document).find('.svsw-reset').remove();
         }
@@ -145,24 +117,20 @@
             this.filterAvailableVariations(availableVariations);
         }
         filterAvailableVariations(availableVariations){
-            const self = this;
             $(document).find('.svsw-frontend-wrap .svsw-attr-wrap').each(function(){
                 const attName = $(this).attr('data-attribute_name');
-                $(this).find('.svsw-swatch').each(function(){
-                    self.filterAvailableVariation(availableVariations[attName], $(this));
-                });
+                $(this).find('.svsw-swatch').each(e => this.filterAvailableVariation(availableVariations[attName], $(e.currentTarget)));
             });
         }
         filterAvailableVariation(availableVariations, item){
-            const self = this;
             if(item.hasClass('svsw-swatch-dropdown')){ // select.
-                item.find('option').each(function(){
-                    const attValue = $(this).val();
-                    self.hideOrDisableSwatch($(this), -1 === availableVariations.indexOf(attValue));
+                item.find('option').each((e) => {
+                    const attValue = $(e.currentTarget).val();
+                    this.hideOrDisableSwatch($(e.currentTarget), -1 === availableVariations.indexOf(attValue));
                 });
             }else{
                 const attValue = item.attr('data-attribute_value');
-                self.hideOrDisableSwatch(item, -1 === availableVariations.indexOf(attValue));
+                this.hideOrDisableSwatch(item, -1 === availableVariations.indexOf(attValue));
             }
         }
         hideOrDisableSwatch(swatchItem, isDisabled){
