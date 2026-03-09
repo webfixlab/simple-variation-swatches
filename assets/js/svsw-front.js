@@ -101,7 +101,12 @@
             Object.keys(this.$state).forEach(key => this.$state[key] = '');
             
             this.imposeStateOnEverything();
-            $(document).find('.svsw-reset').remove();
+            $(document).find('.svsw-reset').remove(); // remove clear variation or reset button.
+            // make all options available again.
+            $(document).find('.svsw-watch').each((_, el) => {
+                if($(el).hasClass('svsw-swatch-dropdown')) $(el).find('option').each((_, cel) => this.hideOrDisableSwatch($(cel), false));
+                else this.hideOrDisableSwatch($(el), false);
+            });
         }
         availableVariationsHandler(){
             let availableVariations = {};
@@ -134,7 +139,7 @@
         }
         hideOrDisableSwatch(swatchItem, isDisabled){
             const settings = svsw_front.settings.variation_behavior;
-            if('disable' === settings)swatchItem.toggleClass('svsw-disabled', isDisabled);
+            if('disable' === settings) swatchItem.toggleClass('svsw-disabled', isDisabled);
             else swatchItem.toggle(!isDisabled);
         }
         toolTip(item, ifHide){
