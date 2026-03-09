@@ -23,7 +23,6 @@ The best part? No complicated features or slow page speeds here! Get ready for a
 **FEATURES**
 
 * New! Automatic disable or hide stockout variations.
-* New! Attribute and it's block design options.
 * WooCommerce High-Performance Order Storage (HPOS) enabled
 * 5 types swatches: color, image, button, radio button and dropdown
 * Option to hide attribute labels
@@ -79,8 +78,10 @@ Yes, just send your [request here](https://webfixlab.com/contact/).
 
 **Simple Variation Swatches**
 
+* Update - Removed attribute block designs.
 * Fix - Swatches only hiding but not disabling.
-* Update - Default variation attribute value handler.
+* Fix - Not enabling unavailable variations on reset variations.
+* Update - Added setting default variation attribute values.
 * Update - Complete frontend JS.
 * Update - New file structure added.
 * Update - Frontend tooltip CSS.

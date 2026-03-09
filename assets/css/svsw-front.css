@@ -144,24 +144,6 @@ label.attr-name{
 select.svsw-swatch-dropdown {
 	padding: 5px 10px;
 }
-.svsw-wrap.att-block-1, .svsw-wrap.att-block-2{
-	background: #ffffff;
-	padding: 15px;
-	-webkit-box-shadow: 0 0 5px rgba(0,0,0,.2);
-	box-shadow: 0 0 5px rgba(0,0,0,.2);
-	max-width: 600px;
-	max-width: 99%;
-	margin: 0 auto;
-	margin-bottom: 20px;
-}
-.svsw-wrap.att-block-1{
-	border-radius: 25px;
-}
-.att-block-1 label.attr-name{
-	padding: 5px 20px;
-	border-top-left-radius: 15px;
-	border-top-right-radius: 15px;
-}
 label.attr-name.an-no-pad {
 	padding-left: 0;
 }
@@ -201,9 +183,6 @@ label.attr-name.an-no-pad {
 	.svsw-swatch.svsw-btn{
 		font-size: 15px !important;
 		padding: 5px 10px;
-	}
-	.svsw-wrap.att-block-1, .svsw-wrap.att-block-2{
-		padding: 15px;
 	}
 	select.svsw-swatch-dropdown {
 		padding: 5px 5px;

@@ -123,12 +123,9 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 			$anc        = ( empty( $anb ) && '#ffffff' === $anc ) || $anc === $anb ? '' : $anc;
 
 			$anc = ! empty( $anc ) ? 'color: ' . esc_attr( $anc ) . ';' : '';
-			$anb = ! empty( $anb ) ? 'background-color: ' . esc_attr( $anb ) . ';margin-bottom: 10px;' : '';
-
-			// attribute block design.
-			$block_design = isset( self::$data['att_block_design'] ) ? 'att-' . self::$data['att_block_design'] : '';
+			$anb = ! empty( $anb ) ? 'background-color: ' . esc_attr( $anb ) . ';' : '';
 			?>
-			<div class="svsw-wrap <?php echo esc_attr( $block_design ); ?>">
+			<div class="svsw-wrap">
 				<?php if ( $show_name ) : ?>
 					<?php
 						echo wp_kses_post(
@@ -137,7 +134,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 								esc_attr( $no_padding ),
 								esc_html( $anc ),
 								esc_html( $anb ),
-								$att_name_underline ? 'border-bottom: 1px solid #888;' : ''
+								$att_name_underline ? 'border-bottom: 1px solid #c2c2c2;margin-bottom: 10px;' : ''
 							)
 						);
 

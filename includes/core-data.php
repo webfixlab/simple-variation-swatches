@@ -54,7 +54,6 @@ $svsw__['fields'] = array(
 	'att_name_underline'  => 'checkbox',
 	'att_name_color'      => 'text',
 	'att_name_background' => 'text',
-	'att_block_design'    => 'radio',
 );
 
 // hook to modify global data variable.

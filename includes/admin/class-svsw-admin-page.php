@@ -184,33 +184,6 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 								<input name="att_name_background" type="text" class="svsw-colorpicker" value="<?php esc_html( $att_name_background ); ?>" data-default-color="">
 							</td>
 						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Attribute block design', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php
-									$design = isset( self::$data['att_block_design'] ) && ! empty( self::$data['att_block_design'] ) ? self::$data['att_block_design'] : 'default';
-
-									$options = array(
-										'default' => __( 'None', 'simple-variation-swatches' ),
-										'block-1' => __( 'Round corner', 'simple-variation-swatches' ),
-										'block-2' => __( 'Square', 'simple-variation-swatches' ),
-									);
-
-									echo '<select name="att_block_design">';
-									foreach ( $options as $key => $value ) {
-										printf(
-											'<option value="%s" %s>%s</option>',
-											esc_attr( $key ),
-											$key === $design ? 'selected' : '',
-											esc_html( $value ),
-										);
-									}
-									echo '</select>';
-									?>
-							</td>
-						</tr>
 					</table>
 				</div>
 				<?php do_action( 'svsw_extra_section' ); ?>

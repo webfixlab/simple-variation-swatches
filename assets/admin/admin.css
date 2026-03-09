@@ -159,9 +159,6 @@ span.dashicons.svsw-remove-img {
 .svsw-content-wrap input[type="submit"] {
 	margin-top: 40px;
 }
-.svsw-att-design {
-	margin: 10px 0 20px 0;
-}
 .svsw-edit-tag-wrap label {
 	margin-bottom: 5px;
 }
@@ -200,12 +197,6 @@ span.dashicons.svsw-remove-img {
 	}
 	.svsw-side{
 		margin-top: 30px;
-	}
-	.att-design-block-1, .att-design-block-2{
-		width: 88%;
-	}
-	.svsw-att-design:last-child{
-		margin-bottom: 0;
 	}
 }
 @media only screen and (max-width: 600px) {
