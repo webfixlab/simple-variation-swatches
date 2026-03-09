@@ -78,8 +78,10 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 				return;
 			}
 
+			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
 			// enqueue style.
-			wp_register_style( 'svsw_admin_style', plugin_dir_url( SVSW ) . 'assets/admin/admin.css', array(), SVSW_VER );
+			wp_register_style( 'svsw_admin_style', plugin_dir_url( SVSW ) . 'assets/admin/admin' . $suffix . '.css', array(), SVSW_VER );
 			wp_enqueue_style( 'svsw_admin_style' );
 
 			// colorpicker.
@@ -89,7 +91,7 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 			// load media uploader script.
 			wp_enqueue_media();
 
-			wp_enqueue_script( 'svsw_admin_script', plugin_dir_url( SVSW ) . 'assets/admin/admin.js', array( 'jquery' ), SVSW_VER, true );
+			wp_enqueue_script( 'svsw_admin_script', plugin_dir_url( SVSW ) . 'assets/admin/admin' . $suffix . '.js', array( 'jquery' ), SVSW_VER, true );
 
 			$var = array(
 				'ajaxurl'    => admin_url( 'admin-ajax.php' ),
@@ -137,10 +139,12 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 				return;
 			}
 
-			wp_register_style( 'svsw-front-css', plugin_dir_url( SVSW ) . 'assets/css/svsw-front.css', array(), SVSW_VER, 'all' );
+			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+			wp_register_style( 'svsw-front-css', plugin_dir_url( SVSW ) . 'assets/css/svsw-front' . $suffix . '.css', array(), SVSW_VER, 'all' );
 			wp_enqueue_style( 'svsw-front-css' );
 
-			wp_register_script( 'svsw-front-js', plugin_dir_url( SVSW ) . 'assets/js/svsw-front.js', array( 'jquery' ), SVSW_VER, true );
+			wp_register_script( 'svsw-front-js', plugin_dir_url( SVSW ) . 'assets/js/svsw-front' . $suffix . '.js', array( 'jquery' ), SVSW_VER, true );
 			wp_enqueue_script( 'svsw-front-js' );
 
 			// localize script.
