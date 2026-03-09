@@ -47,37 +47,36 @@
             else resetWrap.remove();
         }
         imposeStateOnSwatches(items, type){
-            items.each(e => this.imposeStateOnSwatch($(e.currentTarget), type));
+            items.each((_, el) => this.imposeStateOnSwatch($(el), type));
         }
         imposeStateOnSwatch(swatchWrap, type){
             const attName  = swatchWrap.attr('data-attribute_name');
             const attValue = this.$state[attName];
 
+            // for swatches, if the state value is empty, make options available again.
             if('swatch' === type && !attValue) this.removeDisabledClass(swatchWrap);
 
+            // for no swatch, set default attribute select dropdown values.
             if('default' === type || swatchWrap.hasClass('svsw-swatch-dropdown')){ // select.
                 swatchWrap.val(attValue).trigger('change');
                 return;
             }
 
-            swatchWrap.find('.svsw-swatch').each(function(){
-                if($(this).hasClass('svsw-swatch-radio')){
-                    const field = $(this).find('input[type="radio"]');
-                    field.prop('checked', field.val() === attValue);
-                    
-                    $(this).toggleClass('svsw-selected', field.val() === attValue);
-                }else{
-                    $(this).toggleClass('svsw-selected', $(this).attr('data-attribute_value') === attValue);
-                }
+            // handle selecting a swatch.
+            swatchWrap.find('.svsw-swatch').each((_, el) => {
+                const hasRadioBtns     = $(el).hasClass('svsw-swatch-radio');
+                const checkingAttValue = hasRadioBtns ? $(el).find('input[type="radio"]').val() : $(el).attr('data-attribute_value');
+                $(el).toggleClass('svsw-selected', checkingAttValue === attValue); // to select swatch.
+                if(hasRadioBtns) $(el).find('input[type="radio"]').prop('checked', checkingAttValue === attValue); // to select radio button.
             });
         }
         removeDisabledClass(swatchWrap){
             if(swatchWrap.hasClass('svsw-swatch-dropdown')){ // select.
-                swatchWrap.find('option').each(e => this.hideOrDisableSwatch($(e.currentTarget), false));
+                swatchWrap.find('option').each((_, el) => this.hideOrDisableSwatch($(el), false));
                 return;
             }
 
-            swatchWrap.find('.svsw-swatch').each(e => this.hideOrDisableSwatch($(e.currentTarget), false));
+            swatchWrap.find('.svsw-swatch').each((_, el) => this.hideOrDisableSwatch($(el), false));
         }
         swatchClickedEventHandler(item){ // swatch item click
             this.updateState(item);
@@ -86,7 +85,7 @@
             this.clearVariationsBtn();
 
             setTimeout(() => {
-                this.availableVariationsHandler(item);
+                this.availableVariationsHandler();
             }, 100);
         }
         updateState(item){ // update current state data.
@@ -104,12 +103,12 @@
             this.imposeStateOnEverything();
             $(document).find('.svsw-reset').remove();
         }
-        availableVariationsHandler(item){
+        availableVariationsHandler(){
             let availableVariations = {};
-            $(document).find('table.variations select').each(function(){
-                const attName = $(this).attr('data-attribute_name');
-                $(this).find('option').each(function(){
-                    const attValue = $(this).val();
+            $(document).find('table.variations select').each((_, pel) => {
+                const attName = $(pel).attr('data-attribute_name');
+                $(pel).find('option').each((_, el) => {
+                    const attValue = $(el).val();
                     if(!availableVariations[attName]) availableVariations[attName] = [];
                     if(attValue && attValue.length > 0) availableVariations[attName].push(attValue);
                 });
@@ -117,16 +116,16 @@
             this.filterAvailableVariations(availableVariations);
         }
         filterAvailableVariations(availableVariations){
-            $(document).find('.svsw-frontend-wrap .svsw-attr-wrap').each(function(){
-                const attName = $(this).attr('data-attribute_name');
-                $(this).find('.svsw-swatch').each(e => this.filterAvailableVariation(availableVariations[attName], $(e.currentTarget)));
+            $(document).find('.svsw-frontend-wrap .svsw-attr-wrap').each((_, pel) => {
+                const attName = $(pel).attr('data-attribute_name');
+                $(pel).find('.svsw-swatch').each((_, el) => this.filterAvailableVariation(availableVariations[attName], $(el)));
             });
         }
         filterAvailableVariation(availableVariations, item){
             if(item.hasClass('svsw-swatch-dropdown')){ // select.
-                item.find('option').each((e) => {
-                    const attValue = $(e.currentTarget).val();
-                    this.hideOrDisableSwatch($(e.currentTarget), -1 === availableVariations.indexOf(attValue));
+                item.find('option').each((_el) => {
+                    const attValue = $(el).val();
+                    this.hideOrDisableSwatch($(el), -1 === availableVariations.indexOf(attValue));
                 });
             }else{
                 const attValue = item.attr('data-attribute_value');

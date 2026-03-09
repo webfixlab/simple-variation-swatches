@@ -66,7 +66,7 @@
 	border-radius: 50%;
 }
 .svsw-swatch-content .svsw-swatch.svsw_round_corner {
-	border-radius: 5px;
+	border-radius: 10px;
 }
 .svsw-tooltip {
     position: absolute;
