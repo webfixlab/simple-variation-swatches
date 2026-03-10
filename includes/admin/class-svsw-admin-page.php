@@ -86,105 +86,11 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 			<div class="svsw-sections">
 				<div class="svsw-section svsw-section-general"<?php echo 'general' !== $tab ? ' style="display: none;"' : ''; ?>>
 					<h3><?php echo esc_html__( 'General settings', 'simple-variation-swatches' ); ?></h3>
-					<table class="form-table">
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Convert attributes to', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php self::att_to_swatch(); ?>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Attribute label', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php self::hide_att_name(); ?>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Out of stock options', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php self::variation_behavior(); ?>
-							</td>
-						</tr>
-					</table>
+					<?php self::general_tab_content(); ?>
 				</div>
 				<div class="svsw-section svsw-section-appearance"<?php echo 'appearance' !== $tab ? ' style="display: none;"' : ''; ?>>
 					<h3><?php echo esc_html__( 'Appearance', 'simple-variation-swatches' ); ?></h3>
-					<table class="form-table">
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Image swatches style', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php self::swatch_design( 'image' ); ?>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Color swatches style', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php self::swatch_design( 'color' ); ?>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Image swatches size', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php self::swatch_size( 'image' ); ?>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Color swatches size', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php self::swatch_size( 'color' ); ?>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Font size', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php self::font_size(); ?>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Attribute name under line', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php $checked = isset( self::$data['att_name_underline'] ) && 'on' === self::$data['att_name_underline'] ? 'checked' : ''; ?>
-								<input name="att_name_underline" type="checkbox"<?php echo esc_attr( $checked ); ?>>
-								<label><?php echo esc_html__( 'Show', 'simple-variation-swatches' ); ?></label>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Attribute Name Color', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php $att_name_color = isset( self::$data['att_name_color'] ) ? self::$data['att_name_color'] : ''; ?>
-								<input name="att_name_color" type="text" class="svsw-colorpicker" value="<?php esc_html( $att_name_color ); ?>" data-default-color="">
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label><?php echo esc_html__( 'Attribute Name Background', 'simple-variation-swatches' ); ?></label>
-							</th>
-							<td class="forminp forminp-text">
-								<?php $att_name_background = isset( self::$data['att_name_background'] ) ? self::$data['att_name_background'] : ''; ?>
-								<input name="att_name_background" type="text" class="svsw-colorpicker" value="<?php esc_html( $att_name_background ); ?>" data-default-color="">
-							</td>
-						</tr>
-					</table>
+					<?php self::appearence_tab_content(); ?>
 				</div>
 				<?php do_action( 'svsw_extra_section' ); ?>
 			</div>
@@ -193,6 +99,112 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 				<input type="hidden" name="svsw_tab" value="<?php echo esc_attr( $tab ); ?>">  
 				<input type="submit" value="<?php echo esc_html__( 'Save changes', 'simple-variation-swatches' ); ?>" class="button-primary woocommerce-save-button svsw-save">
 			</div>
+			<?php
+		}
+
+		public static function general_tab_content(){
+			?>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Convert attributes to', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php self::att_to_swatch(); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Attribute label', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php self::hide_att_name(); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Out of stock options', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php self::variation_behavior(); ?>
+					</td>
+				</tr>
+			</table>
+			<?php
+		}
+
+		public static function appearence_tab_content(){
+			?>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Image swatches style', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php self::swatch_design( 'image' ); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Color swatches style', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php self::swatch_design( 'color' ); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Image swatches size', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php self::swatch_size( 'image' ); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Color swatches size', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php self::swatch_size( 'color' ); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Font size', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php self::font_size(); ?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Attribute name under line', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php $checked = isset( self::$data['att_name_underline'] ) && 'on' === self::$data['att_name_underline'] ? 'checked' : ''; ?>
+						<input name="att_name_underline" type="checkbox"<?php echo esc_attr( $checked ); ?>>
+						<label><?php echo esc_html__( 'Show', 'simple-variation-swatches' ); ?></label>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Attribute Name Color', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php $att_name_color = self::$data['att_name_color'] ?? ''; ?>
+						<input name="att_name_color" type="text" class="svsw-colorpicker" value="<?php echo esc_html( $att_name_color ); ?>" data-default-color="">
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row" class="titledesc">
+						<label><?php echo esc_html__( 'Attribute Name Background', 'simple-variation-swatches' ); ?></label>
+					</th>
+					<td class="forminp forminp-text">
+						<?php $att_name_background = self::$data['att_name_background'] ?? ''; ?>
+						<input name="att_name_background" type="text" class="svsw-colorpicker" value="<?php echo esc_html( $att_name_background ); ?>" data-default-color="">
+					</td>
+				</tr>
+			</table>
 			<?php
 		}
 

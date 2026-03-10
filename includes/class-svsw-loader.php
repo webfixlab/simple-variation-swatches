@@ -78,7 +78,7 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 				return;
 			}
 
-			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 			// enqueue style.
 			wp_register_style( 'svsw_admin_style', plugin_dir_url( SVSW ) . 'assets/admin/admin' . $suffix . '.css', array(), SVSW_VER );
@@ -139,7 +139,7 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 				return;
 			}
 
-			$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 			wp_register_style( 'svsw-front-css', plugin_dir_url( SVSW ) . 'assets/css/svsw-front' . $suffix . '.css', array(), SVSW_VER, 'all' );
 			wp_enqueue_style( 'svsw-front-css' );
@@ -153,11 +153,7 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 				'type'     => $product->get_type(),
 				'settings' => get_option( 'svsw_settings' ),
 			);
-
-			// if ( 'variable' === $data['type'] ) {
-			// $data[ 'variations' ] = $product->get_available_variations();
-			// }
-
+			
 			wp_localize_script( 'svsw-front-js', 'svsw_front', $data );
 		}
 
