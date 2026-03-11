@@ -153,7 +153,7 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 				'type'     => $product->get_type(),
 				'settings' => get_option( 'svsw_settings' ),
 			);
-			
+
 			wp_localize_script( 'svsw-front-js', 'svsw_front', $data );
 		}
 

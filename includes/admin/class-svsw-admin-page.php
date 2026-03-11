@@ -102,7 +102,10 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 			<?php
 		}
 
-		public static function general_tab_content(){
+		/**
+		 * General settings tab content
+		 */
+		public static function general_tab_content() {
 			?>
 			<table class="form-table">
 				<tr valign="top">
@@ -133,7 +136,12 @@ if ( ! class_exists( 'SVSW_Admin_Page' ) ) {
 			<?php
 		}
 
-		public static function appearence_tab_content(){
+		/**
+		 * Appearence settings tab content
+		 *
+		 * @return void
+		 */
+		public static function appearence_tab_content() {
 			?>
 			<table class="form-table">
 				<tr valign="top">

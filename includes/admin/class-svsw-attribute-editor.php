@@ -51,7 +51,7 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		 *
 		 * @param object $att_tax attribute taxonomy.
 		 */
-		public static function init_attribute_swatch( $att_tax ){
+		public static function init_attribute_swatch( $att_tax ) {
 			// edit term input fields, display.
 			$name = wc_attribute_taxonomy_name( $att_tax->attribute_name );
 
@@ -60,7 +60,7 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 
 			// custom column - for color and image type attribute only.
 			if ( ! self::if_add_term_column( $att_tax ) ) {
-				return;				
+				return;
 			}
 
 			// add content to custom column created.
@@ -78,7 +78,7 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		public static function if_add_term_column( $attribute ) {
 			// Ensure the attribute name is in the correct taxonomy format.
 			$att_name = 'pa_' . $attribute->attribute_name;
-			
+
 			$terms = get_terms(
 				array(
 					'taxonomy'   => $att_name,
@@ -118,7 +118,7 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 			$atts = wc_get_attribute_taxonomies();
 
 			foreach ( $atts as $tax ) {
-				if( $taxonomy !== wc_attribute_taxonomy_name( $tax->attribute_name ) ){
+				if ( wc_attribute_taxonomy_name( $tax->attribute_name ) !== $taxonomy ) {
 					continue;
 				}
 
@@ -176,8 +176,8 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 
 			$fields = array( 'svsw_color', 'svsw_button', 'svsw_radio', 'svsw_image', 'svsw_color_tooltip', 'svsw_image_tooltip' );
 
-			foreach( $fields as $field ){
-				if( ! isset( $_POST[ $field ] ) ){
+			foreach ( $fields as $field ) {
+				if ( ! isset( $_POST[ $field ] ) ) {
 					continue;
 				}
 
@@ -257,8 +257,8 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 			if ( ! empty( $type ) ) {
 				$value = get_term_meta( $term_id, 'svsw_' . $type, true );
 			}
-			
-			if( empty( $value ) || ! in_array( $type, array( 'color', 'image', true ) ) ){
+
+			if ( empty( $value ) || ! in_array( $type, array( 'color', 'image' ), true ) ) {
 				return $content;
 			}
 
@@ -320,8 +320,8 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		 * @param string $type    which swatch field should we display.
 		 * @param int    $term_id current term id.
 		 */
-		private static function render_button( $type, $term_id ){
-			$value = !empty( $term_id ) ? get_term_meta( $term_id, 'svsw_button', true ) : '';
+		private static function render_button( $type, $term_id ) {
+			$value = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_button', true ) : '';
 			?>
 			<div class="form-field svsw-input-field svsw-input-button"<?php echo 'button' !== $type ? ' style="display: none;"' : ''; ?>>
 				<label for="tag-name">Label</label>
@@ -336,11 +336,11 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		 * @param string $type    which swatch field should we display.
 		 * @param int    $term_id current term id.
 		 */
-		private static function render_color( $type, $term_id ){
-			$value   = !empty( $term_id ) ? get_term_meta( $term_id, 'svsw_color', true ) : '';
-			$value   = empty( $value ) ? '#effeff' : $value;
+		private static function render_color( $type, $term_id ) {
+			$value = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_color', true ) : '';
+			$value = empty( $value ) ? '#effeff' : $value;
 
-			$tooltip = !empty( $term_id ) ? get_term_meta( $term_id, 'svsw_color_tooltip', true ) : '';
+			$tooltip = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_color_tooltip', true ) : '';
 			?>
 			<div class="form-field svsw-input-field svsw-input-color"<?php echo 'color' !== $type ? ' style="display: none;"' : ''; ?>>
 				<label for="tag-name">Color</label>
@@ -357,8 +357,8 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		 * @param string $type    which swatch field should we display.
 		 * @param int    $term_id current term id.
 		 */
-		private static function render_radio_button( $type, $term_id ){
-			$value = !empty( $term_id ) ? get_term_meta( $term_id, 'svsw_radio', true ) : '';
+		private static function render_radio_button( $type, $term_id ) {
+			$value = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_radio', true ) : '';
 			?>
 			<div class="form-field svsw-input-field svsw-input-radio"<?php echo 'radio' !== $type ? ' style="display: none;"' : ''; ?>>
 				<label for="tag-name">Label</label>
@@ -373,9 +373,9 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 		 * @param string $type    which swatch field should we display.
 		 * @param int    $term_id current term id.
 		 */
-		private static function render_image( $type, $term_id ){
-			$value   = !empty( $term_id ) ? get_term_meta( $term_id, 'svsw_image', true ) : '';
-			$tooltip = !empty( $term_id ) ? get_term_meta( $term_id, 'svsw_image_tooltip', true ) : '';
+		private static function render_image( $type, $term_id ) {
+			$value   = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_image', true ) : '';
+			$tooltip = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_image_tooltip', true ) : '';
 			?>
 			<div class="form-field svsw-input-field svsw-input-image"<?php echo 'image' !== $type ? ' style="display: none;"' : ''; ?>>
 				<input type="hidden" name="svsw_image" class="svsw-uploaded-image regular-text" value="<?php echo esc_url( $value ); ?>">
