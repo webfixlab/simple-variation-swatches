@@ -141,10 +141,10 @@ if ( ! class_exists( 'SVSW_Loader' ) ) {
 
 			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-			wp_register_style( 'svsw-front-css', plugin_dir_url( SVSW ) . 'assets/css/svsw-front' . $suffix . '.css', array(), SVSW_VER, 'all' );
+			wp_register_style( 'svsw-front-css', plugin_dir_url( SVSW ) . 'assets/css/frontend' . $suffix . '.css', array(), SVSW_VER, 'all' );
 			wp_enqueue_style( 'svsw-front-css' );
 
-			wp_register_script( 'svsw-front-js', plugin_dir_url( SVSW ) . 'assets/js/svsw-front' . $suffix . '.js', array( 'jquery' ), SVSW_VER, true );
+			wp_register_script( 'svsw-front-js', plugin_dir_url( SVSW ) . 'assets/js/frontend' . $suffix . '.js', array( 'jquery' ), SVSW_VER, true );
 			wp_enqueue_script( 'svsw-front-js' );
 
 			// localize script.
