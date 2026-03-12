@@ -26,7 +26,14 @@
 			$( document ).on(
 				'click change',
 				'.svsw-swatch',
-				e => this.swatchClickedEventHandler( $( e.currentTarget ) )
+				( e ) =>
+				{
+					const el = $( e.currentTarget );
+					// when not clicked on a select dropdown.
+					if ( ( 'click' === e.type ) !== el.hasClass( 'svsw-swatch-dropdown' ) ) {
+						this.swatchClickedEventHandler( el );
+					}
+				}
 			);
 			$( document ).on(
 				'click',
@@ -133,24 +140,20 @@
 			);
 		}
 		swatchClickedEventHandler( item ){
-			// swatch item click.
 			this.updateState( item );
 
 			this.imposeStateOnEverything();
 			this.clearVariationsBtn();
 
 			setTimeout(
-				() =>
-				{
-					this.availableVariationsHandler();
-				},
+				() => this.availableVariationsHandler(),
 				100
 			);
 		}
 		updateState( item ){
 			// update current state data.
 			const attName          = item.closest( '.svsw-attr-wrap' ).attr( 'data-attribute_name' );
-			this.$state[ attName ] = item.hasClass( 'svsw-swatch-drodpwn' ) ? item.find( 'option:selected' ).val() : item.attr( 'data-attribute_value' );
+			this.$state[ attName ] = item.hasClass( 'svsw-swatch-dropdown' ) ? item.find( 'option:selected' ).val() : item.attr( 'data-attribute_value' );
 		}
 		imposeStateOnEverything(){
 			this.imposeStateOnSwatches( $( document ).find( '.svsw-frontend-wrap .svsw-attr-wrap' ), 'swatch' );
@@ -164,7 +167,7 @@
 			this.imposeStateOnEverything();
 			$( document ).find( '.svsw-reset' ).remove(); // remove clear variation or reset button.
 			// make all options available again.
-			$( document ).find( '.svsw-watch' ).each(
+			$( document ).find( '.svsw-swatch' ).each(
 				( _, el ) =>
 				{
 					if ( $( el ).hasClass( 'svsw-swatch-dropdown' ) ) {
@@ -224,7 +227,9 @@
 					( _, el ) =>
 					{
 						const attValue = $( el ).val();
-						this.hideOrDisableSwatch( $( el ), -1 === availableVariations.indexOf( attValue ) );
+						if ( attValue && attValue.length > 0 ) {
+							this.hideOrDisableSwatch( $( el ), -1 === availableVariations.indexOf( attValue ) );
+						}
 					}
 				);
 			} else {
@@ -233,11 +238,14 @@
 			}
 		}
 		hideOrDisableSwatch( swatchItem, isDisabled ) {
-			const settings = svsw_front.settings.variation_behavior;
-			if ( 'disable' === settings ) {
-				swatchItem.toggleClass( 'svsw-disabled', isDisabled );
+			if ( 'disable' === svsw_front.settings.variation_behavior ) {
+				if ( swatchItem.is( 'option' ) ) {
+					swatchItem.prop( 'disabled', isDisabled );
+				} else {
+					swatchItem.toggleClass( 'svsw-disabled', isDisabled );
+				}
 			} else {
-				swatchItem.toggle( ! isDisabled );
+				swatchItem.toggleClass( 'svsw-hidden', isDisabled );
 			}
 		}
 		toolTip( item, ifHide ) {

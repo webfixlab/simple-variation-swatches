@@ -1,6 +1,9 @@
 .single-product div.product table.variations{
 	display: none;
 }
+.svsw-hidden{
+	display: none !important;
+}
 .svsw-wrap {
 	margin-bottom: 15px;
 }
