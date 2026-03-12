@@ -78,6 +78,7 @@ Yes, just send your [request here](https://webfixlab.com/contact/).
 
 **Simple Variation Swatches**
 
+* Update - Attribute name added to dropdown option.
 * Fix - Default swatch frontend events.
 * Fix - Font size not applying to Select.
 * Update - Removed attribute block designs.

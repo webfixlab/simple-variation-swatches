@@ -239,13 +239,25 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 				$font_size = 'font-size: ' . esc_attr( self::$data['svsw_font_size'] ) . 'px;';
 			}
 
+			// get the attribute name prefix.
+			$prefix = in_array( substr( $attribute_name, 0, 1 ), [ 'a', 'e', 'i', 'o', 'u' ], true ) ? 'an' : 'a' ;
+			$default_option = sprintf(
+				// translators: %1$s: attribute name prefix, %2$s: attribute name.
+				__( 'Choose %1$s %2$s', 'simple-variation-swatches' ),
+				esc_html( $prefix ),
+				esc_html( $attribute_name )
+			);
+
 			if ( 'default' === $variation_to ) {
 				printf(
 					'<select name="%s" class="svsw-swatch svsw-swatch-dropdown" style="%s">',
 					esc_attr( $attribute_name ),
 					esc_html( $font_size )
 				);
-				echo '<option value="">Choose an option</option>';
+				echo sprintf(
+					'<option value="">%s</option>',
+					esc_html( $default_option )
+				);
 			}
 
 			foreach ( $skipped_terms as $opt_name => $opt_value ) {
