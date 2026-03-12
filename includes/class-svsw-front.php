@@ -243,7 +243,6 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 				printf(
 					'<select name="%s" class="svsw-swatch svsw-swatch-dropdown" style="%s">',
 					esc_attr( $attribute_name ),
-					esc_attr( $attribute_name ),
 					esc_html( $font_size )
 				);
 				echo '<option value="">Choose an option</option>';
