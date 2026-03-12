@@ -110,11 +110,17 @@
 			swatchWrap.find( '.svsw-swatch' ).each(
 				( _, el ) =>
 				{
-					const hasRadioBtns     = $( el ).hasClass( 'svsw-swatch-radio' );
-					const checkingAttValue = hasRadioBtns ? $( el ).find( 'input[type="radio"]' ).val() : $( el ).attr( 'data-attribute_value' );
-					$( el ).toggleClass( 'svsw-selected', checkingAttValue === attValue ); // to select swatch.
-					if ( hasRadioBtns ) {
-						$( el ).find( 'input[type="radio"]' ).prop( 'checked', checkingAttValue === attValue ); // to select radio button.
+					if ( $( el ).hasClass( 'svsw-swatch-dropdown' ) ) {
+						$( el ).val( attValue ).trigger( 'change' );
+					} else {
+						const isRadioBtn = $( el ).hasClass( 'svsw-swatch-radio' );
+						const checkingAttValue = isRadioBtn ? $( el ).find( 'input[type="radio"]' ).val() : $( el ).attr( 'data-attribute_value' );
+						
+						$( el ).toggleClass( 'svsw-selected', checkingAttValue === attValue ); // to select swatch.
+
+						if ( isRadioBtn ) {
+							$( el ).find( 'input[type="radio"]' ).prop( 'checked', checkingAttValue === attValue ); // to select radio button.
+						}
 					}
 				}
 			);
@@ -178,6 +184,7 @@
 								false
 							)
 						);
+						$( el ).val( '' );
 					} else {
 						this.hideOrDisableSwatch( $( el ), false );
 					}

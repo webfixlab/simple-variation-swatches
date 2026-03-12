@@ -78,6 +78,7 @@ Yes, just send your [request here](https://webfixlab.com/contact/).
 
 **Simple Variation Swatches**
 
+* Fix - Default swatch frontend events.
 * Update - Removed attribute block designs.
 * Fix - Swatches only hiding but not disabling.
 * Fix - Not enabling unavailable variations on reset variations.
