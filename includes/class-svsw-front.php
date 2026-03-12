@@ -240,7 +240,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 			}
 
 			// get the attribute name prefix.
-			$prefix = in_array( substr( $attribute_name, 0, 1 ), [ 'a', 'e', 'i', 'o', 'u' ], true ) ? 'an' : 'a' ;
+			$prefix         = in_array( substr( $attribute_name, 0, 1 ), array( 'a', 'e', 'i', 'o', 'u' ), true ) ? 'an' : 'a';
 			$default_option = sprintf(
 				// translators: %1$s: attribute name prefix, %2$s: attribute name.
 				__( 'Choose %1$s %2$s', 'simple-variation-swatches' ),
@@ -254,7 +254,7 @@ if ( ! class_exists( 'SVSW_Front' ) ) {
 					esc_attr( $attribute_name ),
 					esc_html( $font_size )
 				);
-				echo sprintf(
+				printf(
 					'<option value="">%s</option>',
 					esc_html( $default_option )
 				);
