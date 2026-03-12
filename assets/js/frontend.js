@@ -111,7 +111,7 @@
 				( _, el ) =>
 				{
 					if ( $( el ).hasClass( 'svsw-swatch-dropdown' ) ) {
-						$( el ).val( attValue ).trigger( 'change' );
+						$( el ).val( attValue );
 					} else {
 						const isRadioBtn = $( el ).hasClass( 'svsw-swatch-radio' );
 						const checkingAttValue = isRadioBtn ? $( el ).find( 'input[type="radio"]' ).val() : $( el ).attr( 'data-attribute_value' );
