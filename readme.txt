@@ -2,11 +2,11 @@
 Contributors: aikya, smshahriar, webfixlab
 Tags: woocommerce variation, woocommerce variation swatches, woocommerce, variation swatches, woocommerce attributes
 Requires at least: 4.9
-Tested up to: 6.9.1
-Stable tag: 3.0.0
+Tested up to: 7.1.2
+Stable tag: 3.0.1
 Requires PHP: 7.0
 WC requires at least: 3.6
-WC tested up to: 10.5.3
+WC tested up to: 11.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,15 +22,15 @@ The best part? No complicated features or slow page speeds here! Get ready for a
 
 **FEATURES**
 
-* New! Automatic disable or hide stockout variations.
-* WooCommerce High-Performance Order Storage (HPOS) enabled
-* 5 types swatches: color, image, button, radio button and dropdown
-* Option to hide attribute labels
-* Option to set default swatch or variation type
-* Set color and image swatches size
-* 3 styles for color and image swatches: square, circle and round corner
-* Set font size for button and radio button
-* Truly lightweight and extremely fast, almost no impact on page speed
+* Upgrade basic variation attributes to swatches
+* 4 new swatches to choose from, **color**, **image**, **button** and **radio button**
+* **Global convert**: change all variation attributes to swatches
+* 2 global convert options: button and radio button
+* **Swatch tooltip**: displays **attribute tooltip** text for image and color swatches
+* Decent styling options like **sizes**, **shape**, label color and background color
+* Supports correct attribute option order and **default attribute value**
+* **Available variation**: option to **hide** or **cross-out** the unavailable options
+* Attribute name hide option
 
 **HOW TO ADD DIFFERENT VARIATION SWATCHES**
 
@@ -67,25 +67,19 @@ Yes, just send your [request here](https://webfixlab.com/contact/).
 
 == Screenshots ==
 
-1. Front-end View
-2. General settings
-3. Appearence
-4. Swatch Type Selection
+1. Disable or hide out of stock variation swatches
+2. Default attribute value support
+3. Disabled default dropdown option
+4. Edit Color product attribute
+5. Edit Image product attribute
+6. Admin settings - General
+7. Admin settings - Appearence
 
 == Changelog ==
 
-= 3.0.0 2026-03-04 =
+
+= 3.0.1 2026-10-02 =
 
 **Simple Variation Swatches**
 
-* Update - Attribute name added to dropdown option.
-* Fix - Default swatch frontend events.
-* Fix - Font size not applying to Select.
-* Update - Removed attribute block designs.
-* Fix - Swatches only hiding but not disabling.
-* Fix - Not enabling unavailable variations on reset variations.
-* Update - Added setting default variation attribute values.
-* Update - Complete frontend JS.
-* Update - New file structure added.
-* Update - Frontend tooltip CSS.
-* Update - Disabled swatch CSS.
+* Update - Color gradient swatch feature added.
