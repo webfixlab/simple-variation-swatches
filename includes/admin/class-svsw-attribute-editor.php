@@ -174,7 +174,7 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 				return;
 			}
 
-			$fields = array( 'svsw_color', 'svsw_button', 'svsw_radio', 'svsw_image', 'svsw_color_tooltip', 'svsw_image_tooltip' );
+			$fields = array( 'svsw_color', 'svsw_color_2', 'svsw_button', 'svsw_radio', 'svsw_image', 'svsw_color_tooltip', 'svsw_image_tooltip' );
 
 			foreach ( $fields as $field ) {
 				if ( ! isset( $_POST[ $field ] ) ) {
@@ -340,11 +340,15 @@ if ( ! class_exists( 'SVSW_Attribute_Editor' ) ) {
 			$value = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_color', true ) : '';
 			$value = empty( $value ) ? '#effeff' : $value;
 
+			$value_2 = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_color_2', true ) : '';
+			$value_2 = empty( $value_2 ) ? '#effeff' : $value_2;
+
 			$tooltip = ! empty( $term_id ) ? get_term_meta( $term_id, 'svsw_color_tooltip', true ) : '';
 			?>
 			<div class="form-field svsw-input-field svsw-input-color"<?php echo 'color' !== $type ? ' style="display: none;"' : ''; ?>>
-				<label for="tag-name">Color</label>
+				<label for="tag-name"><?php echo esc_html__( 'Color/Dual color', 'simple-variation-swatches' ); ?></label>
 				<input name="svsw_color" type="text" class="svsw-colorpicker" value="<?php echo esc_html( $value ); ?>" data-default-color="">
+				<input name="svsw_color_2" type="text" class="svsw-colorpicker" value="<?php echo esc_html( $value_2 ); ?>" data-default-color="">
 				<label for="tag-name">Tooltip</label>
 				<input name="svsw_color_tooltip" type="text" value="<?php echo esc_html( $tooltip ); ?>" placeholder="Tooltip" class="admin-tooltip">
 			</div>
